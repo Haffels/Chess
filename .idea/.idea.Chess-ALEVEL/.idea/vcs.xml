@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Chess-ALEVEL" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../C:C++/Binary-Search" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../C:C++/Fluid-Sim" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../C:C++/Galaxy-Sim" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../C:C++/Havlock" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../C:C++/Mini-Physics-ASCII" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../C:C++/Quick-Log" vcs="Git" />
+  </component>
+</project>
