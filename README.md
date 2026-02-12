@@ -4,6 +4,6 @@
 
 ```bash
 git clone https://github.com/Haffels/Chess
-cd Test/Test
+cd Chess/Chess-ALEVEL
 dotnet run
 ```
