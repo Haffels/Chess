@@ -61,7 +61,11 @@ namespace Game.Logic
                         {
                             whiteTimeSeconds = 0;
                             isRunning = false;
-                            onTimeExpired?.Invoke('w');
+                            if (onTimeExpired != null)
+                            {
+                                onTimeExpired('w');
+                            }
+
                         }
                     }
                     else
@@ -71,7 +75,11 @@ namespace Game.Logic
                         {
                             blackTimeSeconds = 0;
                             isRunning = false;
-                            onTimeExpired?.Invoke('b');
+                            if (onTimeExpired != null)
+                            {
+                                onTimeExpired('b');
+                            }
+
                         }
                     }
                 }
