@@ -79,7 +79,11 @@ namespace Game.Logic
                     continue;
                 
                 List<Move.moveInfo> legalMoves = GetLegalMovesForPiece(sideToMove, board, i);
-                allMoves.AddRange(legalMoves);
+                foreach (var move in legalMoves)
+                {
+                    allMoves.Add(move);
+                }
+
             }
 
             return allMoves;

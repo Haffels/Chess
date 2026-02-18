@@ -13,26 +13,29 @@ namespace Game.Logic.Bot
             }
 
             if (depth == 0)
-                return Quiescence.quiescence(board, alpha, beta, sideToMove);
+                return Eval.evaluatePosition(board, sideToMove);
 
             var allMoves = Game.GenerateAllLegalMoves(sideToMove, board);
             var orderedMoves = OrderMoves.orderMoves(allMoves, board);
 
             int maxScore = int.MinValue;
+            bool prune = false;
 
             foreach (var move in orderedMoves)
             {
-                Board tempBoard = board.Clone();
-                ApplyMove.applyMove(tempBoard, move);
+                if (!prune)
+                {
+                    Board tempBoard = board.Clone();
+                    ApplyMove.applyMove(tempBoard, move);
 
-                char opponentSide = sideToMove == 'w' ? 'b' : 'w';
-                int score = -minimax(tempBoard, depth - 1, -beta, -alpha, opponentSide);
+                    char opponentSide = sideToMove == 'w' ? 'b' : 'w';
+                    int score = -minimax(tempBoard, depth - 1, -beta, -alpha, opponentSide);
 
-                maxScore = Math.Max(maxScore, score);
-                alpha = Math.Max(alpha, score);
+                    maxScore = Math.Max(maxScore, score);
+                    alpha = Math.Max(alpha, score);
 
-                if (alpha >= beta)
-                    break;
+                    prune = alpha >= beta;
+                }
             }
 
             return maxScore;

@@ -12,11 +12,7 @@ namespace Game.Logic.Bot
             var allMoves = Game.GenerateAllLegalMoves(sideToMove, board);
             if (allMoves.Count == 0) return null;
 
-            int searchDepth = GetAdaptiveDepth.getAdaptiveDepth(board, allMoves.Count);
-
-
             var orderedMoves = OrderMoves.orderMoves(allMoves, board);
-
 
             if (board.IsStartingPosition())
             {
@@ -32,7 +28,7 @@ namespace Game.Logic.Bot
                     ApplyMove.applyMove(tempBoard, move);
 
                     char opponentSide = sideToMove == 'w' ? 'b' : 'w';
-                    int score = -Minimax.minimax(tempBoard, searchDepth - 1, -beta, -alpha, opponentSide);
+                    int score = -Minimax.minimax(tempBoard, Kenith.MAX_DEPTH - 1, -beta, -alpha, opponentSide);
 
                     if (score > bestScore)
                     {

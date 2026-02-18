@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "t54q8BkM3KM=",
+  "dgSpecHash": "rgV5nAUfd7A=",
   "success": true,
   "projectFilePath": "/Users/harry/Projects/C#/Chess/Chess-ALEVEL/Chess-ALEVEL.csproj",
-  "expectedPackageFiles": [
-    "/Users/harry/.nuget/packages/microsoft.netcore.app.ref/9.0.12/microsoft.netcore.app.ref.9.0.12.nupkg.sha512",
-    "/Users/harry/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.12/microsoft.aspnetcore.app.ref.9.0.12.nupkg.sha512",
-    "/Users/harry/.nuget/packages/microsoft.netcore.app.host.osx-arm64/9.0.12/microsoft.netcore.app.host.osx-arm64.9.0.12.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

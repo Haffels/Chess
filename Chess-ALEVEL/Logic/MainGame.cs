@@ -8,7 +8,6 @@ namespace Game.Logic
         public static void Main()
         {
             string basicSetUp = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-            // string basicSetUp = "k7/8/8/8/8/8/8/7K w KQkq - 0 1";
             string startFen = " ";
 
             Board newBoard = new Board();
