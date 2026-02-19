@@ -22,19 +22,19 @@ namespace Game.Logic
         {
             return piece switch
             {
-                Pieces.BLACK * Pieces.PAWN   => '♙',
-                Pieces.BLACK * Pieces.KNIGHT => '♘',
-                Pieces.BLACK * Pieces.BISHOP => '♗',
-                Pieces.BLACK * Pieces.ROOK   => '♖',
-                Pieces.BLACK * Pieces.QUEEN  => '♕',
-                Pieces.BLACK * Pieces.KING   => '♔',
-                Pieces.PAWN   => '♟',
-                Pieces.KNIGHT => '♞',
-                Pieces.BISHOP => '♝',
-                Pieces.ROOK   => '♜',
-                Pieces.QUEEN  => '♛',
-                Pieces.KING   => '♚',
-                _ => '•'
+                Pieces.PAWN => '♙',
+                Pieces.KNIGHT => '♘',
+                Pieces.BISHOP => '♗',
+                Pieces.ROOK => '♖',
+                Pieces.QUEEN => '♕',
+                Pieces.KING => '♔',
+                Pieces.BLACK * Pieces.PAWN => '♟',
+                Pieces.BLACK * Pieces.KNIGHT => '♞',
+                Pieces.BLACK * Pieces.BISHOP => '♝',
+                Pieces.BLACK * Pieces.ROOK => '♜',
+                Pieces.BLACK * Pieces.QUEEN => '♛',
+                Pieces.BLACK * Pieces.KING => '♚',
+                _ => '·'
             };
         }
     }

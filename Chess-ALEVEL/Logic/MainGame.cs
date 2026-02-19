@@ -22,7 +22,7 @@ namespace Game.Logic
             char useTimerChoice = Console.ReadKey().KeyChar;
             Console.WriteLine();
 
-            bool useTimer   = useTimerChoice == 'y' || useTimerChoice == 'Y';
+            bool useTimer = useTimerChoice == 'y' || useTimerChoice == 'Y';
             int timePerSide = 600;
 
             if (useTimer)

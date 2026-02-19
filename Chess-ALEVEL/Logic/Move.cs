@@ -50,6 +50,7 @@ namespace Game.Logic
                 int dir = directions[d];
                 int pos = currentPos;
                 int next = pos + dir;
+                
                 bool blocked = false;
 
                 while (!blocked && next >= 0 && next < 64 &&
@@ -71,7 +72,7 @@ namespace Game.Logic
                     }
                 }
             }
-
+            
             return moves;
         }
     }

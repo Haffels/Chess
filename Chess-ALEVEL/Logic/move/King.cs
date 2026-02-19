@@ -5,25 +5,28 @@ namespace Game.Logic
         private bool isKingWhite;
         private List<MoveInfo> legalMoves = new List<MoveInfo>();
 
-        public King(bool isKingWhite) { this.isKingWhite = isKingWhite; }
+        public King(bool isKingWhite)
+        {
+            this.isKingWhite = isKingWhite;
+        }
 
         public List<MoveInfo> GenerateLegalMoves(int[] board, int currentPos)
         {
             legalMoves.Clear();
-            int[] directions = { MOVE_DOWN_RIGHT, MOVE_DOWN_LEFT, MOVE_UP_RIGHT, MOVE_UP_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, MOVE_LEFT };
+            int[] directions = {MOVE_DOWN_RIGHT, MOVE_DOWN_LEFT, MOVE_UP_RIGHT, MOVE_UP_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, MOVE_LEFT};
 
             int whiteKingStart = 4;
             int blackKingStart = 60;
 
             if (currentPos == (isKingWhite ? whiteKingStart : blackKingStart))
             {
-                bool canCastleKingside  = MakingMoves.CanCastleKingside(isKingWhite);
+                bool canCastleKingside = MakingMoves.CanCastleKingside(isKingWhite);
                 bool canCastleQueenside = MakingMoves.CanCastleQueenside(isKingWhite);
 
                 if (canCastleKingside)
                 {
-                    int kSide1      = currentPos + MOVE_RIGHT;
-                    int kSide2      = currentPos + MOVE_RIGHT * 2;
+                    int kSide1 = currentPos + MOVE_RIGHT;
+                    int kSide2 = currentPos + MOVE_RIGHT * 2;
                     int kRookSquare = currentPos + MOVE_RIGHT * 3;
 
                     if (kSide1 >= 0 && kSide2 < 64 && kRookSquare < 64)
@@ -35,9 +38,9 @@ namespace Game.Logic
 
                 if (canCastleQueenside)
                 {
-                    int qSide1      = currentPos + MOVE_LEFT;
-                    int qSide2      = currentPos + MOVE_LEFT * 2;
-                    int qSide3      = currentPos + MOVE_LEFT * 3;
+                    int qSide1 = currentPos + MOVE_LEFT;
+                    int qSide2 = currentPos + MOVE_LEFT * 2;
+                    int qSide3 = currentPos + MOVE_LEFT * 3;
                     int qRookSquare = currentPos + MOVE_LEFT * 4;
 
                     if (qSide3 >= 0 && qRookSquare >= 0)
@@ -56,8 +59,8 @@ namespace Game.Logic
                 if (pos >= 0 && pos < 64)
                 {
                     int currentRow = currentPos / 8;
-                    int newRow     = pos / 8;
-                    bool wraps     = Math.Abs(newRow - currentRow) > 1 && (dir == MOVE_RIGHT || dir == MOVE_LEFT);
+                    int newRow = pos / 8;
+                    bool wraps = Math.Abs(newRow - currentRow) > 1 && (dir == MOVE_RIGHT || dir == MOVE_LEFT);
 
                     if (!wraps)
                     {

@@ -2,9 +2,9 @@ namespace Game.Logic.Bot
 {
     public class Kenith
     {
-        public const int MAX_DEPTH = 4;
-        public const int CHECKMATE_SCORE = 100000;
-        public const int STALEMATE_SCORE = 0;
+        public const int MAX_DEPTH = 4, 
+            CHECKMATE_SCORE = 100000, 
+            STALEMATE_SCORE = 0;
 
         public static readonly Dictionary<int, int> pieceValues = new Dictionary<int, int>
         {

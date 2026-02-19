@@ -5,7 +5,10 @@ namespace Game.Logic
         private bool isKnightWhite;
         private List<MoveInfo> legalMoves = new List<MoveInfo>();
 
-        public Knight(bool isKnightWhite) { this.isKnightWhite = isKnightWhite; }
+        public Knight(bool isKnightWhite)
+        {
+            this.isKnightWhite = isKnightWhite;
+        }
 
         public List<MoveInfo> GenerateLegalMoves(int[] board, int currentPos)
         {

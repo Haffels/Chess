@@ -30,46 +30,59 @@ namespace Game.Logic.Bot
                 }
             }
 
-
             int totalPieces = whitePieceCount + blackPieceCount;
-            if (totalPieces > 24) score += EvaluateDevelopment(board);
+            if (totalPieces > 24)
+                score += EvaluateDevelopment(board);
 
             score += EvaluateKingSafety(board, 'w') - EvaluateKingSafety(board, 'b');
             score += EvaluatePawnStructure(board);
             score += EvaluateCastling(board);
-
+            
             return sideToMove == 'w' ? score : -score;
         }
 
         public static int EvaluateCastling(Board board)
         {
             int score = 0;
-            if (board.gameBoard[6]  == Pieces.KING)  score += 70;
-            else if (board.gameBoard[2]  == Pieces.KING)  score += 60;
-            if (board.gameBoard[62] == -Pieces.KING) score -= 70;
-            else if (board.gameBoard[58] == -Pieces.KING) score -= 60;
+            if (board.gameBoard[6] == Pieces.KING)
+                score += 70;
+            else if (board.gameBoard[2] == Pieces.KING)
+                score += 60;
+            if (board.gameBoard[62] == -Pieces.KING)
+                score -= 70;
+            else if (board.gameBoard[58] == -Pieces.KING)
+                score -= 60;
             return score;
         }
 
         public static int EvaluateDevelopment(Board board)
         {
             int score = 0;
-            if (board.gameBoard[1]  == Pieces.KNIGHT)  score -= 20;
-            if (board.gameBoard[6]  == Pieces.KNIGHT)  score -= 20;
-            if (board.gameBoard[57] == -Pieces.KNIGHT) score += 20;
-            if (board.gameBoard[62] == -Pieces.KNIGHT) score += 20;
-            if (board.gameBoard[2]  == Pieces.BISHOP)  score -= 15;
-            if (board.gameBoard[5]  == Pieces.BISHOP)  score -= 15;
-            if (board.gameBoard[58] == -Pieces.BISHOP) score += 15;
-            if (board.gameBoard[61] == -Pieces.BISHOP) score += 15;
+            if (board.gameBoard[1] == Pieces.KNIGHT)
+                score -= 20;
+            if (board.gameBoard[6] == Pieces.KNIGHT)
+                score -= 20;
+            if (board.gameBoard[57] == -Pieces.KNIGHT)
+                score += 20;
+            if (board.gameBoard[62] == -Pieces.KNIGHT)
+                score += 20;
+            if (board.gameBoard[2] == Pieces.BISHOP)
+                score -= 15;
+            if (board.gameBoard[5] == Pieces.BISHOP)
+                score -= 15;
+            if (board.gameBoard[58] == -Pieces.BISHOP)
+                score += 15;
+            if (board.gameBoard[61] == -Pieces.BISHOP)
+                score += 15;
             return score;
         }
 
         public static int EvaluateKingSafety(Board board, char side)
         {
             int kingPiece = side == 'w' ? Pieces.KING : -Pieces.KING;
-            int kingPos   = Array.IndexOf(board.gameBoard, kingPiece);
-            if (kingPos == -1) return -10000;
+            int kingPos = Array.IndexOf(board.gameBoard, kingPiece);
+            if (kingPos == -1)
+                return -10000;
 
             int safety = 0;
             int[] adjacentSquares = { -9, -8, -7, -1, 1, 7, 8, 9 };
@@ -96,11 +109,15 @@ namespace Game.Logic.Bot
                 for (int rank = 0; rank < 8; rank++)
                 {
                     int pos = rank * 8 + file;
-                    if (board.gameBoard[pos] ==  Pieces.PAWN) whitePawns++;
-                    if (board.gameBoard[pos] == -Pieces.PAWN) blackPawns++;
+                    if (board.gameBoard[pos] == Pieces.PAWN)
+                        whitePawns++;
+                    if (board.gameBoard[pos] == -Pieces.PAWN)
+                        blackPawns++;
                 }
-                if (whitePawns > 1) score -= (whitePawns - 1) * 15;
-                if (blackPawns > 1) score += (blackPawns - 1) * 15;
+                if (whitePawns > 1)
+                    score -= (whitePawns - 1) * 15;
+                if (blackPawns > 1)
+                    score += (blackPawns - 1) * 15;
             }
             return score;
         }

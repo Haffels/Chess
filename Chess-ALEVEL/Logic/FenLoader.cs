@@ -11,8 +11,8 @@ namespace Game.Logic
             };
 
             string fenBoard = fen.Split(' ')[0];
-            int file = 0;
-            int rank = 7;
+            int file = 0, 
+                rank = 7;
 
             for (int i = 0; i < fenBoard.Length; i++)
             {
@@ -29,7 +29,8 @@ namespace Game.Logic
                 else
                 {
                     int colour = char.IsUpper(ch) ? Pieces.WHITE : Pieces.BLACK;
-                    int piece  = pieceTypeForFen[char.ToLower(ch)];
+                    int piece = pieceTypeForFen[char.ToLower(ch)];
+                    
                     board.gameBoard[rank * 8 + file] = piece * colour;
                     file++;
                 }

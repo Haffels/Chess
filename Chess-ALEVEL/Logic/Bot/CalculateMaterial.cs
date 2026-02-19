@@ -14,12 +14,11 @@ namespace Game.Logic.Bot
                 {
                     int pieceType = Math.Abs(piece);
 
-                    if (Kenith.pieceValues.ContainsKey(pieceType))
-                    {
+                    if (Kenith.pieceValues.ContainsKey(pieceType) && pieceType != Pieces.KING)
                         total += Kenith.pieceValues[pieceType];
-                    }
                 }
             }
+            
             return total;
         }
     }

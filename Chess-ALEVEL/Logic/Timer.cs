@@ -22,8 +22,8 @@ namespace Game.Logic
         {
             if (isRunning) Stop();
             currentSide = side;
-            isRunning   = true;
-            lastUpdate  = DateTime.Now;
+            isRunning = true;
+            lastUpdate = DateTime.Now;
             timerThread = new Thread(TimerCountdown);
             timerThread.IsBackground = true;
             timerThread.Start();
@@ -32,6 +32,7 @@ namespace Game.Logic
         public void Stop()
         {
             isRunning = false;
+            
             if (timerThread != null && timerThread.IsAlive)
                 timerThread.Join(100);
         }
@@ -42,9 +43,11 @@ namespace Game.Logic
             {
                 Thread.Sleep(100);
                 double elapsed = (DateTime.Now - lastUpdate).TotalSeconds;
+                
                 if (elapsed >= 1.0)
                 {
                     lastUpdate = DateTime.Now;
+                    
                     if (currentSide == 'w')
                     {
                         whiteTimeSeconds--;
@@ -52,7 +55,8 @@ namespace Game.Logic
                         {
                             whiteTimeSeconds = 0;
                             isRunning = false;
-                            if (onTimeExpired != null) onTimeExpired('w');
+                            if (onTimeExpired != null)
+                                onTimeExpired('w');
                         }
                     }
                     else
@@ -62,7 +66,8 @@ namespace Game.Logic
                         {
                             blackTimeSeconds = 0;
                             isRunning = false;
-                            if (onTimeExpired != null) onTimeExpired('b');
+                            if (onTimeExpired != null)
+                                onTimeExpired('b');
                         }
                     }
                 }

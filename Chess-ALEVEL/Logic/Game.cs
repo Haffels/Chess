@@ -3,7 +3,7 @@ namespace Game.Logic
     public class Game
     {
         private static List<string> positionHistory = new List<string>();
-        private static int halfMoveClock = 0;
+        private static int halfMoveClock;
 
         public static void ResetGameHistory()
         {
@@ -31,9 +31,9 @@ namespace Game.Logic
 
         public static string CheckGameState(char sideToMove, Board board)
         {
-            string winner    = "null";
+            string winner = "null";
             bool kingInCheck = IsKingInCheck(sideToMove, board);
-            var moves        = GenerateAllLegalMoves(sideToMove, board);
+            var moves = GenerateAllLegalMoves(sideToMove, board);
 
             if (moves.Count == 0)
                 winner = kingInCheck ? (sideToMove == 'w' ? "black wins by checkmate" : "white wins by checkmate") : "draw by stalemate";
@@ -57,7 +57,7 @@ namespace Game.Logic
                 if (piece == Pieces.NO_PIECE) continue;
 
                 bool isWhitePiece = piece > 0;
-                bool isOwnPiece   = (sideToMove == 'w' && isWhitePiece) || (sideToMove == 'b' && !isWhitePiece);
+                bool isOwnPiece = (sideToMove == 'w' && isWhitePiece) || (sideToMove == 'b' && !isWhitePiece);
 
                 if (isOwnPiece)
                 {
@@ -72,7 +72,7 @@ namespace Game.Logic
 
         public static bool IsKingInCheck(char sideToMove, Board board)
         {
-            int kingPiece    = sideToMove == 'w' ? Pieces.WHITE * Pieces.KING : Pieces.BLACK * Pieces.KING;
+            int kingPiece = sideToMove == 'w' ? Pieces.WHITE * Pieces.KING : Pieces.BLACK * Pieces.KING;
             int kingPosition = Array.IndexOf(board.gameBoard, kingPiece);
             if (kingPosition == -1) return true;
 
@@ -83,7 +83,7 @@ namespace Game.Logic
                 int piece = board.gameBoard[i];
                 if (piece == Pieces.NO_PIECE) continue;
 
-                bool isWhitePiece    = piece > 0;
+                bool isWhitePiece = piece > 0;
                 bool isOpponentPiece = (opponentSide == 'w' && isWhitePiece) || (opponentSide == 'b' && !isWhitePiece);
 
                 if (isOpponentPiece)
@@ -103,14 +103,14 @@ namespace Game.Logic
         public static bool WillKingBeInCheck(char sideToMove, Board board, Move.MoveInfo move)
         {
             Board tempBoard = board.Clone();
-            tempBoard.gameBoard[move.to]   = tempBoard.gameBoard[move.from];
+            tempBoard.gameBoard[move.to] = tempBoard.gameBoard[move.from];
             tempBoard.gameBoard[move.from] = Pieces.NO_PIECE;
             return IsKingInCheck(sideToMove, tempBoard);
         }
 
         public static List<Move.MoveInfo> GetLegalMovesForPiece(char sideToMove, Board board, int pieceIndex)
         {
-            var moves      = MovePieces.GetLegalMoves(board.gameBoard, pieceIndex);
+            var moves = MovePieces.GetLegalMoves(board.gameBoard, pieceIndex);
             var legalMoves = new List<Move.MoveInfo>();
 
             for (int i = 0; i < moves.Count; i++)
@@ -124,10 +124,10 @@ namespace Game.Logic
 
                     Board tempBoard1 = board.Clone();
                     tempBoard1.gameBoard[passThroughSquare] = tempBoard1.gameBoard[move.from];
-                    tempBoard1.gameBoard[move.from]         = Pieces.NO_PIECE;
+                    tempBoard1.gameBoard[move.from] = Pieces.NO_PIECE;
 
                     Board tempBoard2 = board.Clone();
-                    tempBoard2.gameBoard[move.to]   = tempBoard2.gameBoard[move.from];
+                    tempBoard2.gameBoard[move.to] = tempBoard2.gameBoard[move.from];
                     tempBoard2.gameBoard[move.from] = Pieces.NO_PIECE;
 
                     if (!IsKingInCheck(sideToMove, tempBoard1) && !IsKingInCheck(sideToMove, tempBoard2))

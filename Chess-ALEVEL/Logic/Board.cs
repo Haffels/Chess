@@ -4,7 +4,10 @@ namespace Game.Logic
     {
         public int[] gameBoard;
 
-        public Board() { gameBoard = new int[64]; }
+        public Board()
+        {
+            gameBoard = new int[64];
+        }
 
         public Board Clone()
         {
@@ -15,13 +18,15 @@ namespace Game.Logic
 
         public void PrintBoard(char userSide)
         {
-            int startRow = userSide == 'w' ? 7 : 0;
-            int step     = userSide == 'w' ? -1 : 1;
+            int startRow = userSide == 'w' ? 7 : 0, 
+                step = userSide == 'w' ? -1 : 1;
 
             for (int i = 0; i < 8; i++)
             {
                 int row = startRow + i * step;
+                
                 Console.Write($"{row + 1} ");
+                
                 for (int col = 0; col < 8; col++)
                     Console.Write($" {UnicodePieces.ToChar(gameBoard[row * 8 + col])} ");
                 Console.WriteLine();

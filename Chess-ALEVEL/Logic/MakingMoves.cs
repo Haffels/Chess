@@ -30,19 +30,18 @@ namespace Game.Logic
 
         public static bool CanCastleKingside(bool isWhite)
         {
-            return isWhite ? !whiteKingMoved && !whiteKingsideRookMoved
-                           : !blackKingMoved && !blackKingsideRookMoved;
+            return isWhite ? !whiteKingMoved && !whiteKingsideRookMoved : !blackKingMoved && !blackKingsideRookMoved;
         }
 
         public static bool CanCastleQueenside(bool isWhite)
         {
-            return isWhite ? !whiteKingMoved && !whiteQueensideRookMoved
-                           : !blackKingMoved && !blackQueensideRookMoved;
+            return isWhite ? !whiteKingMoved && !whiteQueensideRookMoved : !blackKingMoved && !blackQueensideRookMoved;
         }
 
         public static void InitializeTimer(bool enableTimer, int timePerSideInSeconds = 600)
         {
             useTimer = enableTimer;
+            
             if (useTimer)
             {
                 gameTimer = new Timer(timePerSideInSeconds);
@@ -125,6 +124,7 @@ namespace Game.Logic
             if (moves.Count == 0) { Console.WriteLine("no legal moves"); Console.ReadKey(); return; }
 
             Console.WriteLine("legal moves:");
+            
             for (int i = 0; i < moves.Count; i++)
                 Console.WriteLine($"{Sq.ToAlgebraic(moves[i].from)} -> {Sq.ToAlgebraic(moves[i].to)} ({moves[i].moveType})");
 
@@ -154,6 +154,7 @@ namespace Game.Logic
 
                 if (useTimer && gameTimer != null) gameTimer.Stop();
                 sideToMove = sideToMove == 'w' ? 'b' : 'w';
+                
                 board.PrintBoard(userSide);
             }
             else
@@ -164,35 +165,50 @@ namespace Game.Logic
 
         public static void ExecuteMove(Board board, Move.MoveInfo move)
         {
-            int movingPiece  = board.gameBoard[move.from];
+            int movingPiece = board.gameBoard[move.from];
             int capturedPiece = board.gameBoard[move.to];
-            bool isPawnMove  = Math.Abs(movingPiece) == Pieces.PAWN;
-            bool isCapture   = capturedPiece != Pieces.NO_PIECE || move.moveType == Move.MoveType.EnPassant;
+            
+            bool isPawnMove = Math.Abs(movingPiece) == Pieces.PAWN;
+            bool isCapture = capturedPiece != Pieces.NO_PIECE || move.moveType == Move.MoveType.EnPassant;
 
             if (Math.Abs(movingPiece) == Pieces.KING)
             {
-                if (PieceHelpers.IsWhite(movingPiece)) whiteKingMoved = true;
-                else blackKingMoved = true;
+                if (PieceHelpers.IsWhite(movingPiece))
+                    whiteKingMoved = true;
+                else 
+                    blackKingMoved = true;
             }
             else if (Math.Abs(movingPiece) == Pieces.ROOK)
             {
-                if      (move.from == 0)  whiteQueensideRookMoved = true;
-                else if (move.from == 7)  whiteKingsideRookMoved  = true;
-                else if (move.from == 56) blackQueensideRookMoved = true;
-                else if (move.from == 63) blackKingsideRookMoved  = true;
+                if (move.from == 0)
+                    whiteQueensideRookMoved = true;
+                else if (move.from == 7)
+                    whiteKingsideRookMoved = true;
+                else if (move.from == 56)
+                    blackQueensideRookMoved = true;
+                else if (move.from == 63)
+                    blackKingsideRookMoved = true;
             }
 
-            if (enPassantSquare != -1) { board.gameBoard[enPassantSquare] = Pieces.NO_PIECE; enPassantSquare = -1; }
+            if (enPassantSquare != -1)
+            {
+                board.gameBoard[enPassantSquare] = Pieces.NO_PIECE; 
+                enPassantSquare = -1;
+            }
 
             if (move.moveType == Move.MoveType.Castle)
             {
                 bool kingSide = move.to > move.from;
-                board.gameBoard[move.to]   = movingPiece;
+                
+                board.gameBoard[move.to] = movingPiece;
                 board.gameBoard[move.from] = Pieces.NO_PIECE;
+                
                 int rookFrom = kingSide ? move.from + 3 : move.from - 4;
-                int rookTo   = kingSide ? move.from + 1 : move.from - 1;
-                board.gameBoard[rookTo]   = board.gameBoard[rookFrom];
+                int rookTo = kingSide ? move.from + 1 : move.from - 1;
+                
+                board.gameBoard[rookTo] = board.gameBoard[rookFrom];
                 board.gameBoard[rookFrom] = Pieces.NO_PIECE;
+                
                 Game.RecordMove(board, move, isPawnMove, isCapture);
                 return;
             }
@@ -203,14 +219,13 @@ namespace Game.Logic
                 board.gameBoard[capturedPawnSquare] = Pieces.NO_PIECE;
             }
 
-            board.gameBoard[move.to]   = movingPiece;
+            board.gameBoard[move.to] = movingPiece;
             board.gameBoard[move.from] = Pieces.NO_PIECE;
 
             if (move.moveType == Move.MoveType.DoubleMove)
             {
                 enPassantSquare = PieceHelpers.IsWhite(movingPiece) ? move.to - 8 : move.to + 8;
-                board.gameBoard[enPassantSquare] = PieceHelpers.IsWhite(movingPiece)
-                    ? Pieces.EN_PASSANT_MARKER : Pieces.BLACK * Pieces.EN_PASSANT_MARKER;
+                board.gameBoard[enPassantSquare] = PieceHelpers.IsWhite(movingPiece) ? Pieces.EN_PASSANT_MARKER : Pieces.BLACK * Pieces.EN_PASSANT_MARKER;
             }
 
             Game.RecordMove(board, move, isPawnMove, isCapture);
@@ -225,11 +240,11 @@ namespace Game.Logic
             {
                 case "1": 
                 case "queen":
-                    board.gameBoard[move.to] = sideToMove == 'w' ? Pieces.QUEEN  : Pieces.BLACK * Pieces.QUEEN;  
+                    board.gameBoard[move.to] = sideToMove == 'w' ? Pieces.QUEEN : Pieces.BLACK * Pieces.QUEEN;  
                     break;
                 case "2": 
                 case "rook":
-                    board.gameBoard[move.to] = sideToMove == 'w' ? Pieces.ROOK   : Pieces.BLACK * Pieces.ROOK;   
+                    board.gameBoard[move.to] = sideToMove == 'w' ? Pieces.ROOK : Pieces.BLACK * Pieces.ROOK;   
                     break;
                 case "3": 
                 case "bishop":
@@ -241,7 +256,7 @@ namespace Game.Logic
                     break;
                 default:
                     Console.WriteLine("auto promoting to Queen");
-                    board.gameBoard[move.to] = sideToMove == 'w' ? Pieces.QUEEN  : Pieces.BLACK * Pieces.QUEEN;  
+                    board.gameBoard[move.to] = sideToMove == 'w' ? Pieces.QUEEN : Pieces.BLACK * Pieces.QUEEN;  
                     break;
             }
         }
