@@ -4,20 +4,18 @@ namespace Game.Logic.Bot
     {
         public static int GetDepth(Board board, int moveCount)
         {
-            int material = CalculateMaterial.GetTotalMaterial(board);
             int depth = Kenith.MAX_DEPTH;
             
-            if (material <= 4500) 
-                depth += 1;
-            if (material <= 2500) 
-                depth += 1;
-            if (material <= 1500) 
-                depth += 2;
-            
             if (moveCount <= 10)
-                depth += 2;
+                depth = 7;
+            else if (moveCount <= 15)
+                depth = 6;
+            else if (moveCount <= 20)
+                depth = 5;
+            else
+                depth = 4;
 
-            return Math.Min(depth, Kenith.MAX_DEPTH + 2);
+            return depth;
         }
     }
 }
