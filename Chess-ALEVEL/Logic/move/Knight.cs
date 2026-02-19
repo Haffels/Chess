@@ -3,14 +3,11 @@ namespace Game.Logic
     public class Knight : Move
     {
         private bool isKnightWhite;
-        private List<moveInfo> legalMoves = new List<moveInfo>();
+        private List<MoveInfo> legalMoves = new List<MoveInfo>();
 
-        public Knight(bool isKnightWhite)
-        {
-            this.isKnightWhite = isKnightWhite;
-        }
+        public Knight(bool isKnightWhite) { this.isKnightWhite = isKnightWhite; }
 
-        public List<moveInfo> GenerateLegalMoves(int[] board, int currentPos)
+        public List<MoveInfo> GenerateLegalMoves(int[] board, int currentPos)
         {
             legalMoves.Clear();
             int[] directions = { -17, -15, -10, -6, 6, 10, 15, 17 };
@@ -18,41 +15,31 @@ namespace Game.Logic
             int currentRow = currentPos / 8;
             int currentCol = currentPos % 8;
 
-            bool IsOpponentPiece(int piece)
+            for (int i = 0; i < directions.Length; i++)
             {
-                return isKnightWhite ? piece < Pieces.noPiece : piece > Pieces.noPiece;
-            }
+                int pos = currentPos + directions[i];
 
-            foreach (int dir in directions)
-            {
-                int pos = currentPos + dir;
-
-                if (pos >= 0 && pos < 64) 
+                if (pos >= 0 && pos < 64)
                 {
                     int newRow = pos / 8;
                     int newCol = pos % 8;
-
                     int dRow = Math.Abs(newRow - currentRow);
                     int dCol = Math.Abs(newCol - currentCol);
 
                     if ((dRow == 2 && dCol == 1) || (dRow == 1 && dCol == 2))
                     {
                         int piece = board[pos];
+                        bool isOpponent = isKnightWhite ? piece < Pieces.NO_PIECE : piece > Pieces.NO_PIECE;
 
-                        if (board[pos] == Pieces.noPiece)
-                        {
-                            legalMoves.Add(new moveInfo(currentPos, pos, MoveType.Normal));
-                        }
-                        else if (IsOpponentPiece(piece))
-                        {
-                            legalMoves.Add(new moveInfo(currentPos, pos, MoveType.Capture));
-                        }
+                        if (piece == Pieces.NO_PIECE)
+                            legalMoves.Add(new MoveInfo(currentPos, pos, MoveType.Normal));
+                        else if (isOpponent)
+                            legalMoves.Add(new MoveInfo(currentPos, pos, MoveType.Capture));
                     }
                 }
             }
 
             return legalMoves;
-            
         }
     }
 }

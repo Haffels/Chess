@@ -4,14 +4,11 @@ namespace Game.Logic
     {
         private bool isWhite;
 
-        public Bishop(bool isWhite)
-        {
-            this.isWhite = isWhite;
-        }
+        public Bishop(bool isWhite) { this.isWhite = isWhite; }
 
-        public List<moveInfo> GenerateLegalMoves(int[] board, int currentPos)
+        public List<MoveInfo> GenerateLegalMoves(int[] board, int currentPos)
         {
-            int[] directions = { moveUpRight, moveUpLeft, moveDownRight, moveDownLeft };
+            int[] directions = { MOVE_UP_RIGHT, MOVE_UP_LEFT, MOVE_DOWN_RIGHT, MOVE_DOWN_LEFT };
             return SlideMoves(board, currentPos, directions, isWhite);
         }
     }

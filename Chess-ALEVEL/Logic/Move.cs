@@ -2,33 +2,33 @@ namespace Game.Logic
 {
     public class Move
     {
-        protected const int moveUp = 8;
-        protected const int moveDown = -8;
-        protected const int moveRight = 1;
-        protected const int moveLeft = -1;
-        protected const int moveUpRight = 9;
-        protected const int moveUpLeft = 7;
-        protected const int moveDownRight = -7;
-        protected const int moveDownLeft = -9;
+        protected const int MOVE_UP = 8;
+        protected const int MOVE_DOWN = -8;
+        protected const int MOVE_RIGHT = 1;
+        protected const int MOVE_LEFT = -1;
+        protected const int MOVE_UP_RIGHT = 9;
+        protected const int MOVE_UP_LEFT = 7;
+        protected const int MOVE_DOWN_RIGHT = -7;
+        protected const int MOVE_DOWN_LEFT = -9;
 
-        public enum MoveType 
+        public enum MoveType
         {
-            Normal, 
-            Capture, 
-            Castle, 
-            EnPassant, 
-            Promotion, 
+            Normal,
+            Capture,
+            Castle,
+            EnPassant,
+            Promotion,
             DoubleMove,
-            PromotionCapture 
+            PromotionCapture
         }
 
-        public class moveInfo
+        public class MoveInfo
         {
             public int from;
             public int to;
             public MoveType moveType;
 
-            public moveInfo(int from, int to, MoveType moveType)
+            public MoveInfo(int from, int to, MoveType moveType)
             {
                 this.from = from;
                 this.to = to;
@@ -41,36 +41,38 @@ namespace Game.Logic
             return isWhite ? piece < 0 : piece > 0;
         }
 
-        protected List<moveInfo> SlideMoves(int[] board, int currentPos, int[] directions, bool isWhite)
+        protected List<MoveInfo> SlideMoves(int[] board, int currentPos, int[] directions, bool isWhite)
         {
-            var moves = new List<moveInfo>();
+            var moves = new List<MoveInfo>();
 
-            foreach (var dir in directions)
+            for (int d = 0; d < directions.Length; d++)
             {
+                int dir = directions[d];
                 int pos = currentPos;
                 int next = pos + dir;
+                bool blocked = false;
 
-                while (next >= 0 && next < 64 &&
-                       Math.Abs((next % 8) - (pos % 8)) <= 1 && Math.Abs((next / 8) - (pos / 8)) <= 1)
+                while (!blocked && next >= 0 && next < 64 &&
+                       Math.Abs((next % 8) - (pos % 8)) <= 1 &&
+                       Math.Abs((next / 8) - (pos / 8)) <= 1)
                 {
                     int piece = board[next];
-                    if (piece == Pieces.noPiece)
+                    if (piece == Pieces.NO_PIECE)
                     {
-                        moves.Add(new moveInfo(currentPos, next, MoveType.Normal));
+                        moves.Add(new MoveInfo(currentPos, next, MoveType.Normal));
+                        pos = next;
+                        next += dir;
                     }
                     else
                     {
                         if (IsOpponent(piece, isWhite))
-                            moves.Add(new moveInfo(currentPos, next, MoveType.Capture));
-                        break;
+                            moves.Add(new MoveInfo(currentPos, next, MoveType.Capture));
+                        blocked = true;
                     }
-                    pos = next;
-                    next += dir;
                 }
             }
 
             return moves;
         }
-
     }
 }

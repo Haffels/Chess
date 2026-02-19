@@ -11,79 +11,60 @@ namespace Game.Logic
             halfMoveClock = 0;
         }
 
-        public static void RecordMove(Board board, Move.moveInfo move, bool isPawnMove, bool isCapture)
+        public static void RecordMove(Board board, Move.MoveInfo move, bool isPawnMove, bool isCapture)
         {
-            if (isPawnMove || isCapture)
-            {
-                halfMoveClock = 0;
-            }
-            else
-            {
-                halfMoveClock++;
-            }
-            
-            string position = BoardToString(board);
-            positionHistory.Add(position);
+            if (isPawnMove || isCapture) halfMoveClock = 0;
+            else halfMoveClock++;
+            positionHistory.Add(BoardToString(board));
         }
 
         private static string BoardToString(Board board)
         {
-            return string.Join(",", board.gameBoard);
+            string result = "";
+            for (int i = 0; i < board.gameBoard.Length; i++)
+            {
+                if (i > 0) result += ",";
+                result += board.gameBoard[i].ToString();
+            }
+            return result;
         }
 
         public static string CheckGameState(char sideToMove, Board board)
         {
-            string winner = "null";
-
+            string winner    = "null";
             bool kingInCheck = IsKingInCheck(sideToMove, board);
-            var moves = GenerateAllLegalMoves(sideToMove, board);
-            
+            var moves        = GenerateAllLegalMoves(sideToMove, board);
+
             if (moves.Count == 0)
-            {
-                if (kingInCheck)
-                {
-                    winner = sideToMove == 'w' ? "black wins by checkmate" : "white wins by checkmate";
-                }
-                else
-                {
-                    winner = "draw by stalemate";
-                }
-            }
+                winner = kingInCheck ? (sideToMove == 'w' ? "black wins by checkmate" : "white wins by checkmate") : "draw by stalemate";
             else if (CheckFiftyMoveRule())
-            {
                 winner = "draw by fifty move rule";
-            }
             else if (CheckThreeFoldRepetition())
-            {
                 winner = "draw by threefold repetition";
-            }
             else if (CheckInsufficientMaterial(board))
-            {
                 winner = "draw by insufficient material";
-            }
 
             return winner;
         }
 
-        public static List<Move.moveInfo> GenerateAllLegalMoves(char sideToMove, Board board)
+        public static List<Move.MoveInfo> GenerateAllLegalMoves(char sideToMove, Board board)
         {
-            var allMoves = new List<Move.moveInfo>();
+            var allMoves = new List<Move.MoveInfo>();
 
             for (int i = 0; i < board.gameBoard.Length; i++)
             {
                 int piece = board.gameBoard[i];
-                if (piece == Pieces.noPiece) continue;
+                if (piece == Pieces.NO_PIECE) continue;
 
                 bool isWhitePiece = piece > 0;
-                if ((sideToMove == 'w' && !isWhitePiece) || (sideToMove == 'b' && isWhitePiece))
-                    continue;
-                
-                List<Move.moveInfo> legalMoves = GetLegalMovesForPiece(sideToMove, board, i);
-                foreach (var move in legalMoves)
-                {
-                    allMoves.Add(move);
-                }
+                bool isOwnPiece   = (sideToMove == 'w' && isWhitePiece) || (sideToMove == 'b' && !isWhitePiece);
 
+                if (isOwnPiece)
+                {
+                    var pieceMoves = GetLegalMovesForPiece(sideToMove, board, i);
+                    for (int j = 0; j < pieceMoves.Count; j++)
+                        allMoves.Add(pieceMoves[j]);
+                }
             }
 
             return allMoves;
@@ -91,176 +72,135 @@ namespace Game.Logic
 
         public static bool IsKingInCheck(char sideToMove, Board board)
         {
-            int kingPiece = (sideToMove == 'w') ? Pieces.white * Pieces.king : Pieces.black * Pieces.king;
+            int kingPiece    = sideToMove == 'w' ? Pieces.WHITE * Pieces.KING : Pieces.BLACK * Pieces.KING;
             int kingPosition = Array.IndexOf(board.gameBoard, kingPiece);
-
             if (kingPosition == -1) return true;
 
-            char opponentSide = (sideToMove == 'w') ? 'b' : 'w';
-            
+            char opponentSide = sideToMove == 'w' ? 'b' : 'w';
+
             for (int i = 0; i < board.gameBoard.Length; i++)
             {
                 int piece = board.gameBoard[i];
-                if (piece == Pieces.noPiece) continue;
+                if (piece == Pieces.NO_PIECE) continue;
 
-                bool isWhitePiece = piece > 0;
-                if ((opponentSide == 'w' && !isWhitePiece) || (opponentSide == 'b' && isWhitePiece))
-                    continue;
+                bool isWhitePiece    = piece > 0;
+                bool isOpponentPiece = (opponentSide == 'w' && isWhitePiece) || (opponentSide == 'b' && !isWhitePiece);
 
-                var pseudoMoves = MovePieces.GetLegalMoves(board.gameBoard, i);
-                foreach (var move in pseudoMoves)
+                if (isOpponentPiece)
                 {
-                    if (move.to == kingPosition)
-                        return true;
+                    var pseudoMoves = MovePieces.GetLegalMoves(board.gameBoard, i);
+                    for (int j = 0; j < pseudoMoves.Count; j++)
+                    {
+                        if (pseudoMoves[j].to == kingPosition)
+                            return true;
+                    }
                 }
             }
 
             return false;
         }
 
-        public static bool WillKingBeInCheck(char sideToMove, Board board, Move.moveInfo move)
+        public static bool WillKingBeInCheck(char sideToMove, Board board, Move.MoveInfo move)
         {
             Board tempBoard = board.Clone();
-            tempBoard.gameBoard[move.to] = tempBoard.gameBoard[move.from];
-            tempBoard.gameBoard[move.from] = Pieces.noPiece;
-
+            tempBoard.gameBoard[move.to]   = tempBoard.gameBoard[move.from];
+            tempBoard.gameBoard[move.from] = Pieces.NO_PIECE;
             return IsKingInCheck(sideToMove, tempBoard);
         }
 
-        public static List<Move.moveInfo> GetLegalMovesForPiece(char sideToMove, Board board, int pieceIndex)
+        public static List<Move.MoveInfo> GetLegalMovesForPiece(char sideToMove, Board board, int pieceIndex)
         {
-            List<Move.moveInfo> moves = MovePieces.GetLegalMoves(board.gameBoard, pieceIndex);
-            List<Move.moveInfo> legalMoves = new List<Move.moveInfo>();
+            var moves      = MovePieces.GetLegalMoves(board.gameBoard, pieceIndex);
+            var legalMoves = new List<Move.MoveInfo>();
 
-            foreach (var move in moves)
+            for (int i = 0; i < moves.Count; i++)
             {
-                // Special handling for castling
+                var move = moves[i];
                 if (move.moveType == Move.MoveType.Castle)
                 {
-                    char opponentSide = sideToMove == 'w' ? 'b' : 'w';
-                    
-                    // King must not be in check currently
-                    if (IsKingInCheck(sideToMove, board))
-                        continue;
-                    
-                    // Determine which square the king passes through
+                    if (IsKingInCheck(sideToMove, board)) continue;
+
                     int passThroughSquare = move.to > move.from ? move.from + 1 : move.from - 1;
-                    
-                    // King must not pass through check
+
                     Board tempBoard1 = board.Clone();
                     tempBoard1.gameBoard[passThroughSquare] = tempBoard1.gameBoard[move.from];
-                    tempBoard1.gameBoard[move.from] = Pieces.noPiece;
-                    if (IsKingInCheck(sideToMove, tempBoard1))
-                        continue;
-                    
-                    // King must not end in check
+                    tempBoard1.gameBoard[move.from]         = Pieces.NO_PIECE;
+
                     Board tempBoard2 = board.Clone();
-                    tempBoard2.gameBoard[move.to] = tempBoard2.gameBoard[move.from];
-                    tempBoard2.gameBoard[move.from] = Pieces.noPiece;
-                    if (IsKingInCheck(sideToMove, tempBoard2))
-                        continue;
-                    
-                    legalMoves.Add(move);
+                    tempBoard2.gameBoard[move.to]   = tempBoard2.gameBoard[move.from];
+                    tempBoard2.gameBoard[move.from] = Pieces.NO_PIECE;
+
+                    if (!IsKingInCheck(sideToMove, tempBoard1) && !IsKingInCheck(sideToMove, tempBoard2))
+                        legalMoves.Add(move);
                 }
                 else
                 {
-                    // Normal move - just check if it leaves king in check
                     if (!WillKingBeInCheck(sideToMove, board, move))
                         legalMoves.Add(move);
                 }
             }
-            
+
             return legalMoves;
         }
-        
-        public static bool CheckFiftyMoveRule()
-        {
-            return halfMoveClock >= 100;
-        }
+
+        public static bool CheckFiftyMoveRule() => halfMoveClock >= 100;
 
         public static bool CheckThreeFoldRepetition()
         {
             if (positionHistory.Count < 3) return false;
-
-            string currentPosition = positionHistory[positionHistory.Count - 1];
-            int repetitionCount = 0;
-            
-            foreach (string position in positionHistory)
+            string current = positionHistory[positionHistory.Count - 1];
+            int count = 0;
+            for (int i = 0; i < positionHistory.Count; i++)
             {
-                if (position == currentPosition)
+                if (positionHistory[i] == current)
                 {
-                    repetitionCount++;
-                    if (repetitionCount >= 3)
-                        return true;
+                    count++;
+                    if (count >= 3) return true;
                 }
             }
-
             return false;
         }
 
         public static bool CheckInsufficientMaterial(Board board)
         {
-            int whiteKnights = 0, blackKnights = 0;
-            int whiteBishops = 0, blackBishops = 0;
-            int whitePawns = 0, blackPawns = 0;
-            int whiteRooks = 0, blackRooks = 0;
-            int whiteQueens = 0, blackQueens = 0;
+            int wKnights = 0, bKnights = 0, wBishops = 0, bBishops = 0;
+            int wPawns = 0, bPawns = 0, wRooks = 0, bRooks = 0, wQueens = 0, bQueens = 0;
 
             for (int i = 0; i < 64; i++)
             {
                 int piece = board.gameBoard[i];
-                int pieceType = Math.Abs(piece);
-
+                int type  = Math.Abs(piece);
                 if (piece > 0)
                 {
-                    switch (pieceType)
+                    switch (type)
                     {
-                        case Pieces.pawn: whitePawns++; break;
-                        case Pieces.knight: whiteKnights++; break;
-                        case Pieces.bishop: whiteBishops++; break;
-                        case Pieces.rook: whiteRooks++; break;
-                        case Pieces.queen: whiteQueens++; break;
+                        case Pieces.PAWN:   wPawns++;   break;
+                        case Pieces.KNIGHT: wKnights++; break;
+                        case Pieces.BISHOP: wBishops++; break;
+                        case Pieces.ROOK:   wRooks++;   break;
+                        case Pieces.QUEEN:  wQueens++;  break;
                     }
                 }
                 else if (piece < 0)
                 {
-                    switch (pieceType)
+                    switch (type)
                     {
-                        case Pieces.pawn: blackPawns++; break;
-                        case Pieces.knight: blackKnights++; break;
-                        case Pieces.bishop: blackBishops++; break;
-                        case Pieces.rook: blackRooks++; break;
-                        case Pieces.queen: blackQueens++; break;
+                        case Pieces.PAWN:   bPawns++;   break;
+                        case Pieces.KNIGHT: bKnights++; break;
+                        case Pieces.BISHOP: bBishops++; break;
+                        case Pieces.ROOK:   bRooks++;   break;
+                        case Pieces.QUEEN:  bQueens++;  break;
                     }
                 }
             }
-            
-            if (whitePawns > 0 || blackPawns > 0 || 
-                whiteRooks > 0 || blackRooks > 0 || 
-                whiteQueens > 0 || blackQueens > 0)
-            {
+
+            if (wPawns > 0 || bPawns > 0 || wRooks > 0 || bRooks > 0 || wQueens > 0 || bQueens > 0)
                 return false;
-            }
-
-
-            if (whiteKnights == 0 && whiteBishops == 0 && 
-                blackKnights == 0 && blackBishops == 0)
-            {
-                return true;
-            }
-
-            if ((whiteKnights == 1 && whiteBishops == 0 && blackKnights == 0 && blackBishops == 0) ||
-                (blackKnights == 1 && blackBishops == 0 && whiteKnights == 0 && whiteBishops == 0))
-            {
-                return true;
-            }
-            
-            if ((whiteBishops == 1 && whiteKnights == 0 && blackKnights == 0 && blackBishops == 0) ||
-                (blackBishops == 1 && blackKnights == 0 && whiteKnights == 0 && whiteBishops == 0))
-            {
-                return true;
-            }
-
+            if (wKnights == 0 && wBishops == 0 && bKnights == 0 && bBishops == 0) return true;
+            if ((wKnights == 1 && wBishops == 0 && bKnights == 0 && bBishops == 0) ||
+                (bKnights == 1 && bBishops == 0 && wKnights == 0 && wBishops == 0)) return true;
+            if ((wBishops == 1 && wKnights == 0 && bKnights == 0 && bBishops == 0) ||
+                (bBishops == 1 && bKnights == 0 && wKnights == 0 && wBishops == 0)) return true;
             return false;
         }
     }

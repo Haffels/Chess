@@ -2,42 +2,28 @@ namespace Game.Logic.Bot
 {
     public class FindBestMove
     {
-        public static Move.moveInfo findBestMove(char sideToMove, Board board)
+        public static Move.MoveInfo FindBestMoveNow(char sideToMove, Board board)
         {
-            Move.moveInfo bestMove = null;
-            int bestScore = int.MinValue;
-            int alpha = int.MinValue;
-            int beta = int.MaxValue;
-
             var allMoves = Game.GenerateAllLegalMoves(sideToMove, board);
             if (allMoves.Count == 0) return null;
 
-            var orderedMoves = OrderMoves.orderMoves(allMoves, board);
+            int searchDepth  = GetAdaptiveDepth.GetDepth(board, allMoves.Count);
+            var orderedMoves = OrderMoves.OrderMovesList(allMoves, board);
 
-            if (board.IsStartingPosition())
+            Move.MoveInfo bestMove = null;
+            int bestScore = int.MinValue;
+            int alpha     = int.MinValue;
+            int beta      = int.MaxValue;
+
+            for (int i = 0; i < orderedMoves.Count; i++)
             {
-                int topN = Math.Min(5, orderedMoves.Count);
-                Random rng = new Random();
-                bestMove = orderedMoves[rng.Next(topN)];
-            }
-            else
-            {
-                foreach (var move in orderedMoves)
-                {
-                    Board tempBoard = board.Clone();
-                    ApplyMove.applyMove(tempBoard, move);
+                Board tempBoard   = board.Clone();
+                ApplyMove.ApplyMoveToBoard(tempBoard, orderedMoves[i]);
+                char opponentSide = sideToMove == 'w' ? 'b' : 'w';
+                int score = -Minimax.RunMinimax(tempBoard, searchDepth - 1, -beta, -alpha, opponentSide);
 
-                    char opponentSide = sideToMove == 'w' ? 'b' : 'w';
-                    int score = -Minimax.minimax(tempBoard, Kenith.MAX_DEPTH - 1, -beta, -alpha, opponentSide);
-
-                    if (score > bestScore)
-                    {
-                        bestScore = score;
-                        bestMove = move;
-                    }
-
-                    alpha = Math.Max(alpha, score);
-                }
+                if (score > bestScore) { bestScore = score; bestMove = orderedMoves[i]; }
+                if (score > alpha)     alpha = score;
             }
 
             return bestMove;

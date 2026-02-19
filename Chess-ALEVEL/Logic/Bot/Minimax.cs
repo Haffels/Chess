@@ -2,42 +2,38 @@ namespace Game.Logic.Bot
 {
     public class Minimax
     {
-        public static int minimax(Board board, int depth, int alpha, int beta, char sideToMove)
+        public static int RunMinimax(Board board, int depth, int alpha, int beta, char sideToMove)
         {
-            string gameState = Game.CheckGameState(sideToMove, board);
-            if (gameState != "null")
+            var allMoves = Game.GenerateAllLegalMoves(sideToMove, board);
+
+            if (allMoves.Count == 0)
             {
-                if (gameState.Contains("wins"))
+                if (Game.IsKingInCheck(sideToMove, board))
                     return -Kenith.CHECKMATE_SCORE + (Kenith.MAX_DEPTH - depth);
                 return Kenith.STALEMATE_SCORE;
             }
 
             if (depth == 0)
-                return Eval.evaluatePosition(board, sideToMove);
+                return Eval.EvaluatePosition(board, sideToMove);
 
-            var allMoves = Game.GenerateAllLegalMoves(sideToMove, board);
-            var orderedMoves = OrderMoves.orderMoves(allMoves, board);
-
+            var orderedMoves = OrderMoves.OrderMovesList(allMoves, board);
             int maxScore = int.MinValue;
-            bool prune = false;
+            bool prune   = false;
 
-            foreach (var move in orderedMoves)
+            for (int i = 0; i < orderedMoves.Count; i++)
             {
                 if (!prune)
                 {
-                    Board tempBoard = board.Clone();
-                    ApplyMove.applyMove(tempBoard, move);
-
+                    Board tempBoard  = board.Clone();
+                    ApplyMove.ApplyMoveToBoard(tempBoard, orderedMoves[i]);
                     char opponentSide = sideToMove == 'w' ? 'b' : 'w';
-                    int score = -minimax(tempBoard, depth - 1, -beta, -alpha, opponentSide);
+                    int score = -RunMinimax(tempBoard, depth - 1, -beta, -alpha, opponentSide);
 
-                    maxScore = Math.Max(maxScore, score);
-                    alpha = Math.Max(alpha, score);
-
+                    if (score > maxScore) maxScore = score;
+                    if (score > alpha)    alpha    = score;
                     prune = alpha >= beta;
                 }
             }
-
             return maxScore;
         }
     }

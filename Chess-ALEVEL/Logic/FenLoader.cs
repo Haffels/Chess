@@ -1,4 +1,4 @@
-﻿namespace Game.Logic
+namespace Game.Logic
 {
     public static class FenLoader
     {
@@ -6,40 +6,32 @@
         {
             var pieceTypeForFen = new Dictionary<char, int>()
             {
-                ['k'] = Pieces.king, ['q'] = Pieces.queen, ['b'] = Pieces.bishop,
-                ['r'] = Pieces.rook, ['n'] = Pieces.knight, ['p'] = Pieces.pawn
+                ['k'] = Pieces.KING,  ['q'] = Pieces.QUEEN,  ['b'] = Pieces.BISHOP,
+                ['r'] = Pieces.ROOK,  ['n'] = Pieces.KNIGHT, ['p'] = Pieces.PAWN
             };
 
             string fenBoard = fen.Split(' ')[0];
-
             int file = 0;
             int rank = 7;
 
-            foreach (char currentFenDigit in fenBoard)
+            for (int i = 0; i < fenBoard.Length; i++)
             {
-
-                if (currentFenDigit == '/')
+                char ch = fenBoard[i];
+                if (ch == '/')
                 {
-                    file = Pieces.noPiece;
+                    file = Pieces.NO_PIECE;
                     rank--;
                 }
-                else if (char.IsDigit(currentFenDigit))
+                else if (char.IsDigit(ch))
                 {
-                    file += (int)char.GetNumericValue(currentFenDigit);
+                    file += (int)char.GetNumericValue(ch);
                 }
                 else
                 {
-
-                    int pieceColour;
-                    int piece;
-                    pieceColour = char.IsUpper(currentFenDigit) ? Pieces.white : Pieces.black;
-                    piece = pieceTypeForFen[char.ToLower(currentFenDigit)];
-                    
-                    int squareIndex = rank * 8 + file;
-                    board.gameBoard[squareIndex] = piece * pieceColour;
-
+                    int colour = char.IsUpper(ch) ? Pieces.WHITE : Pieces.BLACK;
+                    int piece  = pieceTypeForFen[char.ToLower(ch)];
+                    board.gameBoard[rank * 8 + file] = piece * colour;
                     file++;
-                    
                 }
             }
         }

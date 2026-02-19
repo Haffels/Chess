@@ -4,10 +4,7 @@ namespace Game.Logic
     {
         public int[] gameBoard;
 
-        public Board()
-        {
-            gameBoard = new int[64];
-        }
+        public Board() { gameBoard = new int[64]; }
 
         public Board Clone()
         {
@@ -19,24 +16,16 @@ namespace Game.Logic
         public void PrintBoard(char userSide)
         {
             int startRow = userSide == 'w' ? 7 : 0;
-            int step = userSide == 'w' ? -1 : 1;
+            int step     = userSide == 'w' ? -1 : 1;
 
             for (int i = 0; i < 8; i++)
             {
                 int row = startRow + i * step;
-                int rankLabel = row + 1;
-                
-                Console.Write($"{rankLabel} ");
-
+                Console.Write($"{row + 1} ");
                 for (int col = 0; col < 8; col++)
-                {
-                    int index = row * 8 + col;
-                    Console.Write($" {UnicodePieces.ToChar(gameBoard[index])} ");
-                }
-                
+                    Console.Write($" {UnicodePieces.ToChar(gameBoard[row * 8 + col])} ");
                 Console.WriteLine();
             }
-            
             Console.WriteLine("   a  b  c  d  e  f  g  h");
         }
 
@@ -44,24 +33,16 @@ namespace Game.Logic
         {
             int[] startingBoard =
             {
-                Pieces.rook, Pieces.knight, Pieces.bishop,
-                Pieces.queen, Pieces.king, Pieces.bishop,
-                Pieces.knight, Pieces.rook,
-                Pieces.pawn, Pieces.pawn, Pieces.pawn,
-                Pieces.pawn, Pieces.pawn, Pieces.pawn,
-                Pieces.pawn, Pieces.pawn,
+                Pieces.ROOK, Pieces.KNIGHT, Pieces.BISHOP, Pieces.QUEEN, Pieces.KING, Pieces.BISHOP, Pieces.KNIGHT, Pieces.ROOK,
+                Pieces.PAWN, Pieces.PAWN, Pieces.PAWN, Pieces.PAWN, Pieces.PAWN, Pieces.PAWN, Pieces.PAWN, Pieces.PAWN,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
-                Pieces.black * Pieces.pawn, Pieces.black * Pieces.pawn,
-                Pieces.black * Pieces.pawn, Pieces.black * Pieces.pawn,
-                Pieces.black * Pieces.pawn, Pieces.black * Pieces.pawn,
-                Pieces.black * Pieces.pawn, Pieces.black * Pieces.pawn,
-                Pieces.black * Pieces.rook, Pieces.black * Pieces.knight,
-                Pieces.black * Pieces.bishop, Pieces.black * Pieces.queen,
-                Pieces.black * Pieces.king, Pieces.black * Pieces.bishop,
-                Pieces.black * Pieces.knight, Pieces.black * Pieces.rook
+                Pieces.BLACK * Pieces.PAWN, Pieces.BLACK * Pieces.PAWN, Pieces.BLACK * Pieces.PAWN, Pieces.BLACK * Pieces.PAWN,
+                Pieces.BLACK * Pieces.PAWN, Pieces.BLACK * Pieces.PAWN, Pieces.BLACK * Pieces.PAWN, Pieces.BLACK * Pieces.PAWN,
+                Pieces.BLACK * Pieces.ROOK, Pieces.BLACK * Pieces.KNIGHT, Pieces.BLACK * Pieces.BISHOP, Pieces.BLACK * Pieces.QUEEN,
+                Pieces.BLACK * Pieces.KING, Pieces.BLACK * Pieces.BISHOP, Pieces.BLACK * Pieces.KNIGHT, Pieces.BLACK * Pieces.ROOK
             };
 
             for (int i = 0; i < 64; i++)
@@ -69,7 +50,6 @@ namespace Game.Logic
                 if (gameBoard[i] != startingBoard[i])
                     return false;
             }
-
             return true;
         }
     }

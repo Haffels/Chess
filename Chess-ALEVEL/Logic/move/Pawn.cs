@@ -3,112 +3,87 @@ namespace Game.Logic
     public class Pawn : Move
     {
         private bool isPawnWhite;
-        private List<moveInfo> legalMoves = new List<moveInfo>();
+        private List<MoveInfo> legalMoves = new List<MoveInfo>();
 
-        public Pawn(bool isPawnWhite)
-        {
-            this.isPawnWhite = isPawnWhite;
-        }
-        
+        public Pawn(bool isPawnWhite) { this.isPawnWhite = isPawnWhite; }
 
-
-        public List<moveInfo> GenerateLegalMoves(int[] board, int currentPos)
+        public List<MoveInfo> GenerateLegalMoves(int[] board, int currentPos)
         {
             legalMoves.Clear();
-            
-            bool IsEnPassantMarker(int piece)
-            {
-                return isPawnWhite ? piece == Pieces.black * Pieces.enPassantMarker : piece == Pieces.enPassantMarker;
-            }
 
-            int direction = isPawnWhite ? moveUp : moveDown;
-            
-            int startRank = isPawnWhite ? 1 : 6;
-            int promotionRank = isPawnWhite ? 7 : 0;
-            int enPassantRank = isPawnWhite ? 5 : 4;
-            
-            int currentFile = currentPos % 8;
-            int currentRank = currentPos / 8;
-            
-            int diaganalLeft = isPawnWhite ? moveUpLeft : moveDownLeft;
-            int diaganalRight = isPawnWhite ? moveUpRight : moveDownRight;
-            
-            int captureLeft = currentPos + diaganalLeft;
-            int captureRight = currentPos + diaganalRight;
-
-            bool IsOpponentPiece(int piece)
-            {
-                return isPawnWhite ? piece < 0 : piece > 0;
-            }
+            int direction      = isPawnWhite ? MOVE_UP : MOVE_DOWN;
+            int startRank      = isPawnWhite ? 1 : 6;
+            int promotionRank  = isPawnWhite ? 7 : 0;
+            int enPassantRank  = isPawnWhite ? 5 : 4;
+            int currentFile    = currentPos % 8;
+            int currentRank    = currentPos / 8;
+            int diagonalLeft   = isPawnWhite ? MOVE_UP_LEFT  : MOVE_DOWN_LEFT;
+            int diagonalRight  = isPawnWhite ? MOVE_UP_RIGHT : MOVE_DOWN_RIGHT;
+            int captureLeft    = currentPos + diagonalLeft;
+            int captureRight   = currentPos + diagonalRight;
 
             int forwardOne = currentPos + direction;
-            if (forwardOne < 0 || forwardOne >= 64) 
-                return legalMoves; 
-            
-            // Move forward one square
-            if (board[forwardOne] == Pieces.noPiece)
+            if (forwardOne >= 0 && forwardOne < 64)
             {
-                int forwardRank = forwardOne / 8;
-                
-                if (forwardRank == promotionRank)
-                    legalMoves.Add(new moveInfo(currentPos, forwardOne, MoveType.Promotion));
-                else
-                    legalMoves.Add(new moveInfo(currentPos, forwardOne, MoveType.Normal));
+                if (board[forwardOne] == Pieces.NO_PIECE)
+                {
+                    if (forwardOne / 8 == promotionRank)
+                        legalMoves.Add(new MoveInfo(currentPos, forwardOne, MoveType.Promotion));
+                    else
+                        legalMoves.Add(new MoveInfo(currentPos, forwardOne, MoveType.Normal));
+                }
+
+                if (currentRank == startRank)
+                {
+                    int moveTwice = currentPos + direction * 2;
+                    if (moveTwice >= 0 && moveTwice < 64 &&
+                        board[forwardOne] == Pieces.NO_PIECE &&
+                        board[moveTwice]  == Pieces.NO_PIECE)
+                    {
+                        legalMoves.Add(new MoveInfo(currentPos, moveTwice, MoveType.DoubleMove));
+                    }
+                }
             }
 
-            
-            //enpassant
-            // en passant
             if (currentRank == enPassantRank)
             {
-                if (currentFile > 0 && captureLeft >= 0 && captureLeft < 64 && IsEnPassantMarker(board[captureLeft]))
-                {
-                    legalMoves.Add(new moveInfo(currentPos, captureLeft, MoveType.EnPassant));
-                }
+                bool leftIsEnPassant  = isPawnWhite ? board[captureLeft]  == Pieces.BLACK * Pieces.EN_PASSANT_MARKER
+                                                    : board[captureLeft]  == Pieces.EN_PASSANT_MARKER;
+                bool rightIsEnPassant = isPawnWhite ? board[captureRight] == Pieces.BLACK * Pieces.EN_PASSANT_MARKER
+                                                    : board[captureRight] == Pieces.EN_PASSANT_MARKER;
 
-                if (currentFile < 7 && captureRight >= 0 && captureRight < 64 && IsEnPassantMarker(board[captureRight]))
-                {
-                    legalMoves.Add(new moveInfo(currentPos, captureRight, MoveType.EnPassant));
-                }
+                if (currentFile > 0 && captureLeft >= 0 && captureLeft < 64 && leftIsEnPassant)
+                    legalMoves.Add(new MoveInfo(currentPos, captureLeft, MoveType.EnPassant));
+
+                if (currentFile < 7 && captureRight >= 0 && captureRight < 64 && rightIsEnPassant)
+                    legalMoves.Add(new MoveInfo(currentPos, captureRight, MoveType.EnPassant));
             }
 
+            bool leftIsOpponent = false;
+            if (currentFile > 0 && captureLeft >= 0 && captureLeft < 64)
+                leftIsOpponent = isPawnWhite ? board[captureLeft] < 0 : board[captureLeft] > 0;
 
-            //promotion
-            if (currentFile > 0 && captureLeft >= 0 && captureLeft < 64 && IsOpponentPiece(board[captureLeft]))
+            bool rightIsOpponent = false;
+            if (currentFile < 7 && captureRight >= 0 && captureRight < 64)
+                rightIsOpponent = isPawnWhite ? board[captureRight] < 0 : board[captureRight] > 0;
+
+
+            if (currentFile > 0 && captureLeft >= 0 && captureLeft < 64 && leftIsOpponent)
             {
-                int targetRank = captureLeft / 8;
-                
-                if (targetRank == promotionRank)
-                    legalMoves.Add(new moveInfo(currentPos, captureLeft, MoveType.PromotionCapture));
+                if (captureLeft / 8 == promotionRank)
+                    legalMoves.Add(new MoveInfo(currentPos, captureLeft, MoveType.PromotionCapture));
                 else
-                    legalMoves.Add(new moveInfo(currentPos, captureLeft, MoveType.Capture));
-
+                    legalMoves.Add(new MoveInfo(currentPos, captureLeft, MoveType.Capture));
             }
 
-            if (currentFile < 7 && captureRight >= 0 && captureRight < 64 && IsOpponentPiece(board[captureRight]))
+            if (currentFile < 7 && captureRight >= 0 && captureRight < 64 && rightIsOpponent)
             {
-                int targetRank = captureRight / 8;
-                
-                if (targetRank == promotionRank)
-                    legalMoves.Add(new moveInfo(currentPos, captureRight, MoveType.PromotionCapture));
+                if (captureRight / 8 == promotionRank)
+                    legalMoves.Add(new MoveInfo(currentPos, captureRight, MoveType.PromotionCapture));
                 else
-                    legalMoves.Add(new moveInfo(currentPos, captureRight, MoveType.Capture));
+                    legalMoves.Add(new MoveInfo(currentPos, captureRight, MoveType.Capture));
             }
 
-
-
-            // Double move
-            if (currentRank == startRank)
-            {
-                int moveTwice = currentPos + direction * 2;
-                if (moveTwice >= 0 && moveTwice < 64 &&
-                    board[currentPos + direction] == Pieces.noPiece &&
-                    board[moveTwice] == Pieces.noPiece)
-                {
-                    legalMoves.Add(new moveInfo(currentPos, moveTwice, MoveType.DoubleMove));
-                }
-            }
-            
             return legalMoves;
         }
     }

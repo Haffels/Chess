@@ -9,51 +9,42 @@ namespace Game.Logic
         private char currentSide;
         private DateTime lastUpdate;
 
+        public event Action<char> onTimeExpired;
+
         public Timer(int timePerSideInSeconds = 600)
         {
             whiteTimeSeconds = timePerSideInSeconds;
             blackTimeSeconds = timePerSideInSeconds;
             isRunning = false;
         }
-        
+
         public void Start(char side)
         {
-            if (isRunning)
-            {
-                stop();
-            }
-
+            if (isRunning) Stop();
             currentSide = side;
-            isRunning = true;
-            lastUpdate = DateTime.Now;
-
-            timerThread = new Thread(timerCountdown);
+            isRunning   = true;
+            lastUpdate  = DateTime.Now;
+            timerThread = new Thread(TimerCountdown);
             timerThread.IsBackground = true;
             timerThread.Start();
         }
-        
-        public void stop()
+
+        public void Stop()
         {
             isRunning = false;
             if (timerThread != null && timerThread.IsAlive)
-            {
-                timerThread.Join(100); // Wait briefly for thread to finish
-            }
+                timerThread.Join(100);
         }
-        
-        private void timerCountdown()
+
+        private void TimerCountdown()
         {
             while (isRunning)
             {
-                Thread.Sleep(100); // Update every 100ms for smoother display
-                
-                DateTime now = DateTime.Now;
-                double elapsedSeconds = (now - lastUpdate).TotalSeconds;
-                
-                if (elapsedSeconds >= 1.0)
+                Thread.Sleep(100);
+                double elapsed = (DateTime.Now - lastUpdate).TotalSeconds;
+                if (elapsed >= 1.0)
                 {
-                    lastUpdate = now;
-                    
+                    lastUpdate = DateTime.Now;
                     if (currentSide == 'w')
                     {
                         whiteTimeSeconds--;
@@ -61,11 +52,7 @@ namespace Game.Logic
                         {
                             whiteTimeSeconds = 0;
                             isRunning = false;
-                            if (onTimeExpired != null)
-                            {
-                                onTimeExpired('w');
-                            }
-
+                            if (onTimeExpired != null) onTimeExpired('w');
                         }
                     }
                     else
@@ -75,35 +62,27 @@ namespace Game.Logic
                         {
                             blackTimeSeconds = 0;
                             isRunning = false;
-                            if (onTimeExpired != null)
-                            {
-                                onTimeExpired('b');
-                            }
-
+                            if (onTimeExpired != null) onTimeExpired('b');
                         }
                     }
                 }
             }
         }
-        
-        public event Action<char> onTimeExpired;
-        
-        public int getRemainingTime(char side)
+
+        public int GetRemainingTime(char side)
         {
             return side == 'w' ? whiteTimeSeconds : blackTimeSeconds;
         }
-        
-        public string getFormattedTime(char side)
+
+        public string GetFormattedTime(char side)
         {
-            int TotalSeconds = getRemainingTime(side);
-            int minutes = TotalSeconds / 60;
-            int seconds = TotalSeconds % 60;
-            return $"{minutes:D2}:{seconds:D2}";
+            int totalSeconds = GetRemainingTime(side);
+            return $"{totalSeconds / 60:D2}:{totalSeconds % 60:D2}";
         }
-        
-        public void displayTimers()
+
+        public void DisplayTimers()
         {
-            Console.WriteLine($"White: {getFormattedTime('w')} | Black: {getFormattedTime('b')}");
+            Console.WriteLine($"White: {GetFormattedTime('w')} | Black: {GetFormattedTime('b')}");
         }
     }
 }
