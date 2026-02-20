@@ -105,6 +105,14 @@ namespace Game.Logic
             Board tempBoard = board.Clone();
             tempBoard.gameBoard[move.to] = tempBoard.gameBoard[move.from];
             tempBoard.gameBoard[move.from] = Pieces.NO_PIECE;
+            
+            if (move.moveType == Move.MoveType.EnPassant)
+            {
+                int movingPiece = tempBoard.gameBoard[move.to];
+                int capturedPawnSquare = PieceHelpers.IsWhite(movingPiece) ? move.to - 8 : move.to + 8;
+                tempBoard.gameBoard[capturedPawnSquare] = Pieces.NO_PIECE;
+            }
+            
             return IsKingInCheck(sideToMove, tempBoard);
         }
 
@@ -143,7 +151,10 @@ namespace Game.Logic
             return legalMoves;
         }
 
-        public static bool CheckFiftyMoveRule() => halfMoveClock >= 100;
+        public static bool CheckFiftyMoveRule()
+        {
+            return halfMoveClock >= 100;
+        }
 
         public static bool CheckThreeFoldRepetition()
         {
@@ -155,9 +166,11 @@ namespace Game.Logic
                 if (positionHistory[i] == current)
                 {
                     count++;
-                    if (count >= 3) return true;
+                    if (count >= 3) 
+                        return true;
                 }
             }
+            
             return false;
         }
 
@@ -170,37 +183,49 @@ namespace Game.Logic
             {
                 int piece = board.gameBoard[i];
                 int type  = Math.Abs(piece);
+                
                 if (piece > 0)
                 {
                     switch (type)
                     {
-                        case Pieces.PAWN:   wPawns++;   break;
-                        case Pieces.KNIGHT: wKnights++; break;
-                        case Pieces.BISHOP: wBishops++; break;
-                        case Pieces.ROOK:   wRooks++;   break;
-                        case Pieces.QUEEN:  wQueens++;  break;
+                        case Pieces.PAWN:   wPawns++;   
+                            break;
+                        case Pieces.KNIGHT: wKnights++; 
+                            break;
+                        case Pieces.BISHOP: wBishops++; 
+                            break;
+                        case Pieces.ROOK:   wRooks++;   
+                            break;
+                        case Pieces.QUEEN:  wQueens++;  
+                            break;
                     }
                 }
                 else if (piece < 0)
                 {
                     switch (type)
                     {
-                        case Pieces.PAWN:   bPawns++;   break;
-                        case Pieces.KNIGHT: bKnights++; break;
-                        case Pieces.BISHOP: bBishops++; break;
-                        case Pieces.ROOK:   bRooks++;   break;
-                        case Pieces.QUEEN:  bQueens++;  break;
+                        case Pieces.PAWN:   bPawns++;   
+                            break;
+                        case Pieces.KNIGHT: bKnights++; 
+                            break;
+                        case Pieces.BISHOP: bBishops++; 
+                            break;
+                        case Pieces.ROOK:   bRooks++;   
+                            break;
+                        case Pieces.QUEEN:  bQueens++;  
+                            break;
                     }
                 }
             }
 
             if (wPawns > 0 || bPawns > 0 || wRooks > 0 || bRooks > 0 || wQueens > 0 || bQueens > 0)
                 return false;
-            if (wKnights == 0 && wBishops == 0 && bKnights == 0 && bBishops == 0) return true;
-            if ((wKnights == 1 && wBishops == 0 && bKnights == 0 && bBishops == 0) ||
-                (bKnights == 1 && bBishops == 0 && wKnights == 0 && wBishops == 0)) return true;
-            if ((wBishops == 1 && wKnights == 0 && bKnights == 0 && bBishops == 0) ||
-                (bBishops == 1 && bKnights == 0 && wKnights == 0 && wBishops == 0)) return true;
+            if (wKnights == 0 && wBishops == 0 && bKnights == 0 && bBishops == 0) 
+                return true;
+            if ((wKnights == 1 && wBishops == 0 && bKnights == 0 && bBishops == 0) || (bKnights == 1 && bBishops == 0 && wKnights == 0 && wBishops == 0)) 
+                return true;
+            if ((wBishops == 1 && wKnights == 0 && bKnights == 0 && bBishops == 0) || (bBishops == 1 && bKnights == 0 && wKnights == 0 && wBishops == 0)) 
+                return true;
             return false;
         }
     }

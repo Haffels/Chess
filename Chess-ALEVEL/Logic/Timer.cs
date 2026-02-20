@@ -24,6 +24,7 @@ namespace Game.Logic
             currentSide = side;
             isRunning = true;
             lastUpdate = DateTime.Now;
+            
             timerThread = new Thread(TimerCountdown);
             timerThread.IsBackground = true;
             timerThread.Start();

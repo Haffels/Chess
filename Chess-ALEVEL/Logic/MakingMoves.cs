@@ -14,21 +14,7 @@ namespace Game.Logic
         private static bool blackQueensideRookMoved = false;
         private static Timer gameTimer = null;
         private static bool useTimer = false;
-
-        public static void ResetGameState()
-        {
-            sideToMove = 'w';
-            enPassantSquare = -1;
-            whiteKingMoved = false;
-            blackKingMoved = false;
-            whiteKingsideRookMoved = false;
-            whiteQueensideRookMoved = false;
-            blackKingsideRookMoved = false;
-            blackQueensideRookMoved = false;
-            
-            Game.ResetGameHistory();
-        }
-
+        
         public static bool CanCastleKingside(bool isWhite)
         {
             return isWhite ? !whiteKingMoved && !whiteKingsideRookMoved : !blackKingMoved && !blackKingsideRookMoved;
@@ -39,7 +25,7 @@ namespace Game.Logic
             return isWhite ? !whiteKingMoved && !whiteQueensideRookMoved : !blackKingMoved && !blackQueensideRookMoved;
         }
 
-        public static void InitializeTimer(bool enableTimer, int timePerSideInSeconds = 600)
+        public static void CreateTimer(bool enableTimer, int timePerSideInSeconds = 600)
         {
             useTimer = enableTimer;
             
@@ -47,17 +33,14 @@ namespace Game.Logic
             {
                 gameTimer = new Timer(timePerSideInSeconds);
                 gameTimer.onTimeExpired += OnTimerExpired;
-                Console.WriteLine($"Timer enabled: {timePerSideInSeconds / 60} minutes per side");
+                Console.WriteLine($"timer: {timePerSideInSeconds / 60} minutes per side");
             }
         }
 
         private static void OnTimerExpired(char side)
         {
-            Console.Clear();
-            Console.WriteLine($"\n{(side == 'w' ? "White" : "Black")}'s time has expired!");
-            Console.WriteLine($"{(side == 'w' ? "Black" : "White")} wins on time!");
-            Console.WriteLine("\nPress any key to exit...");
-            Console.ReadKey();
+            Console.WriteLine($"{(side == 'w' ? "White" : "Black")}'s time has expired");
+            Console.WriteLine($"{(side == 'w' ? "Black" : "White")} wins on time");
             Environment.Exit(0);
         }
 
@@ -71,7 +54,7 @@ namespace Game.Logic
             if (result != "null")
             {
                 if (useTimer && gameTimer != null) gameTimer.Stop();
-                Console.WriteLine($"Game over: {result}");
+                Console.WriteLine($"game over: {result}");
                 Console.ReadKey();
                 return;
             }
@@ -91,6 +74,7 @@ namespace Game.Logic
                 {
                     Console.WriteLine($"kenith moves from {botMove.from} to {botMove.to}");
                     ExecuteMove(board, botMove);
+                    
                     if (botMove.moveType == Move.MoveType.Promotion || botMove.moveType == Move.MoveType.PromotionCapture)
                     {
                         int colour = sideToMove == 'w' ? Pieces.WHITE : Pieces.BLACK;
@@ -98,7 +82,10 @@ namespace Game.Logic
                     }
                     if (useTimer && gameTimer != null) gameTimer.Stop();
                     sideToMove = sideToMove == 'w' ? 'b' : 'w';
-                    if (userGameMode == "3") Thread.Sleep(500);
+                    
+                    //slows turns down
+                    // if (userGameMode == "3")
+                    //     Thread.Sleep(500);
                 }
                 return;
             }
@@ -106,24 +93,35 @@ namespace Game.Logic
             Console.Write("piece to move: ");
             string fromInput = Console.ReadLine();
             int userPieceSelection = Sq.Parse(fromInput);
+            
             if (userPieceSelection == -1)
             {
-                Console.WriteLine("invalid"); Console.ReadKey(); return;
+                Console.WriteLine("invalid"); 
+                Console.ReadKey(); 
+                return;
             }
 
             int usersPiece = board.gameBoard[userPieceSelection];
+            
             if (usersPiece == Pieces.NO_PIECE)
             {
-                Console.WriteLine("no piece on that square"); Console.ReadKey(); return;
+                Console.WriteLine("no piece on that square"); 
+                Console.ReadKey(); 
+                return;
             }
-            if ((sideToMove == 'w' && !PieceHelpers.IsWhite(usersPiece)) ||
-                (sideToMove == 'b' && !PieceHelpers.IsBlack(usersPiece)))
+            if ((sideToMove == 'w' && !PieceHelpers.IsWhite(usersPiece)) || (sideToMove == 'b' && !PieceHelpers.IsBlack(usersPiece)))
             {
-                Console.WriteLine("wrong colour"); Console.ReadKey(); return;
+                Console.WriteLine("wrong colour"); Console.ReadKey(); 
+                return;
             }
 
             var moves = Game.GetLegalMovesForPiece(sideToMove, board, userPieceSelection);
-            if (moves.Count == 0) { Console.WriteLine("no legal moves"); Console.ReadKey(); return; }
+            if (moves.Count == 0) 
+            { 
+                Console.WriteLine("no legal moves"); 
+                Console.ReadKey(); 
+                return; 
+            }
 
             Console.WriteLine("legal moves:");
             
@@ -135,7 +133,8 @@ namespace Game.Logic
             int toIndex = Sq.Parse(toInput);
             if (toIndex == -1)
             {
-                Console.WriteLine("invalid"); Console.ReadKey(); return;
+                Console.WriteLine("invalid"); Console.ReadKey(); 
+                return;
             }
 
             Move.MoveInfo selectedMove = null;
@@ -162,7 +161,7 @@ namespace Game.Logic
             }
             else
             {
-                Console.WriteLine("Illegal move"); Console.ReadKey();
+                Console.WriteLine("invalid"); Console.ReadKey();
             }
         }
 

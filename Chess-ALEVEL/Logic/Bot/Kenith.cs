@@ -2,7 +2,7 @@ namespace Game.Logic.Bot
 {
     public class Kenith
     {
-        public const int MAX_DEPTH = 4;
+        public const int MAX_DEPTH = 7;
         public const int CHECKMATE_SCORE = 100000;
         public const int STALEMATE_SCORE = 0;
 

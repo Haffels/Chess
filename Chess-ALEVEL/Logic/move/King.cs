@@ -25,28 +25,28 @@ namespace Game.Logic
 
                 if (canCastleKingside)
                 {
-                    int kSide1 = currentPos + MOVE_RIGHT;
-                    int kSide2 = currentPos + MOVE_RIGHT * 2;
-                    int kRookSquare = currentPos + MOVE_RIGHT * 3;
+                    int kingSide1 = currentPos + MOVE_RIGHT;
+                    int kingSide2 = currentPos + MOVE_RIGHT * 2;
+                    int kingRookSquare = currentPos + MOVE_RIGHT * 3;
 
-                    if (kSide1 >= 0 && kSide2 < 64 && kRookSquare < 64)
+                    if (kingSide1 >= 0 && kingSide2 < 64 && kingRookSquare < 64)
                     {
-                        if (board[kSide1] == Pieces.NO_PIECE && board[kSide2] == Pieces.NO_PIECE && Math.Abs(board[kRookSquare]) == Pieces.ROOK)
-                            legalMoves.Add(new MoveInfo(currentPos, kSide2, MoveType.Castle));
+                        if (board[kingSide1] == Pieces.NO_PIECE && board[kingSide2] == Pieces.NO_PIECE && Math.Abs(board[kingRookSquare]) == Pieces.ROOK)
+                            legalMoves.Add(new MoveInfo(currentPos, kingSide2, MoveType.Castle));
                     }
                 }
 
                 if (canCastleQueenside)
                 {
-                    int qSide1 = currentPos + MOVE_LEFT;
-                    int qSide2 = currentPos + MOVE_LEFT * 2;
-                    int qSide3 = currentPos + MOVE_LEFT * 3;
-                    int qRookSquare = currentPos + MOVE_LEFT * 4;
+                    int queenSide1 = currentPos + MOVE_LEFT;
+                    int queenSide2 = currentPos + MOVE_LEFT * 2;
+                    int queenSide3 = currentPos + MOVE_LEFT * 3;
+                    int queenRookSquare = currentPos + MOVE_LEFT * 4;
 
-                    if (qSide3 >= 0 && qRookSquare >= 0)
+                    if (queenSide3 >= 0 && queenRookSquare >= 0)
                     {
-                        if (board[qSide1] == Pieces.NO_PIECE && board[qSide2] == Pieces.NO_PIECE && board[qSide3] == Pieces.NO_PIECE && Math.Abs(board[qRookSquare]) == Pieces.ROOK)
-                            legalMoves.Add(new MoveInfo(currentPos, qSide2, MoveType.Castle));
+                        if (board[queenSide1] == Pieces.NO_PIECE && board[queenSide2] == Pieces.NO_PIECE && board[queenSide3] == Pieces.NO_PIECE && Math.Abs(board[queenRookSquare]) == Pieces.ROOK)
+                            legalMoves.Add(new MoveInfo(currentPos, queenSide2, MoveType.Castle));
                     }
                 }
             }
@@ -64,7 +64,7 @@ namespace Game.Logic
 
                     if (!wraps)
                     {
-                        int piece      = board[pos];
+                        int piece = board[pos];
                         bool isOpponent = isKingWhite ? piece < Pieces.NO_PIECE : piece > Pieces.NO_PIECE;
 
                         if (piece == Pieces.NO_PIECE)

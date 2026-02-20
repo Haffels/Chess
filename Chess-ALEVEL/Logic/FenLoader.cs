@@ -16,20 +16,20 @@ namespace Game.Logic
 
             for (int i = 0; i < fenBoard.Length; i++)
             {
-                char ch = fenBoard[i];
-                if (ch == '/')
+                char newRank = fenBoard[i];
+                if (newRank == '/')
                 {
                     file = Pieces.NO_PIECE;
                     rank--;
                 }
-                else if (char.IsDigit(ch))
+                else if (char.IsDigit(newRank))
                 {
-                    file += (int)char.GetNumericValue(ch);
+                    file += (int)char.GetNumericValue(newRank);
                 }
                 else
                 {
-                    int colour = char.IsUpper(ch) ? Pieces.WHITE : Pieces.BLACK;
-                    int piece = pieceTypeForFen[char.ToLower(ch)];
+                    int colour = char.IsUpper(newRank) ? Pieces.WHITE : Pieces.BLACK;
+                    int piece = pieceTypeForFen[char.ToLower(newRank)];
                     
                     board.gameBoard[rank * 8 + file] = piece * colour;
                     file++;

@@ -13,7 +13,7 @@ namespace Game.Logic
         public List<MoveInfo> GenerateLegalMoves(int[] board, int currentPos)
         {
             legalMoves.Clear();
-            int[] directions = { -17, -15, -10, -6, 6, 10, 15, 17 };
+            int[] directions = {-17, -15, -10, -6, 6, 10, 15, 17};
 
             int currentRow = currentPos / 8;
             int currentCol = currentPos % 8;

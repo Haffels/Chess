@@ -32,10 +32,10 @@ namespace Game.Logic
                 if (int.TryParse(timeInput, out int minutes) && minutes > 0)
                     timePerSide = minutes * 60;
                 else
-                    Console.WriteLine("Invalid input, using default 10 minutes");
+                    Console.WriteLine("invalid setting default");
             }
 
-            MakingMoves.InitializeTimer(useTimer, timePerSide);
+            MakingMoves.CreateTimer(useTimer, timePerSide);
 
             while (true)
             {
