@@ -31,6 +31,7 @@ namespace Game.Logic.Bot
             }
 
             int totalPieces = whitePieceCount + blackPieceCount;
+            
             if (totalPieces > 24)
                 score += EvaluateDevelopment(board);
 
@@ -85,7 +86,8 @@ namespace Game.Logic.Bot
                 return -10000;
 
             int safety = 0;
-            int[] adjacentSquares = { -9, -8, -7, -1, 1, 7, 8, 9 };
+            int[] adjacentSquares = {-9, -8, -7, -1, 1, 7, 8, 9};
+            
             for (int i = 0; i < adjacentSquares.Length; i++)
             {
                 int pos = kingPos + adjacentSquares[i];

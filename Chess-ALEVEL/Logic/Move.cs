@@ -53,9 +53,7 @@ namespace Game.Logic
                 
                 bool blocked = false;
 
-                while (!blocked && next >= 0 && next < 64 &&
-                       Math.Abs((next % 8) - (pos % 8)) <= 1 &&
-                       Math.Abs((next / 8) - (pos / 8)) <= 1)
+                while (!blocked && next >= 0 && next < 64 &&Math.Abs((next % 8) - (pos % 8)) <= 1 &&Math.Abs((next / 8) - (pos / 8)) <= 1)
                 {
                     int piece = board[next];
                     if (piece == Pieces.NO_PIECE)

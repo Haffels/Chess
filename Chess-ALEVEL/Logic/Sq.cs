@@ -2,24 +2,20 @@ namespace Game.Logic
 {
     public static class Sq
     {
-        public static bool TryParse(string input, out int index)
+        public static int Parse(string input)
         {
-            index = -1;
-            
-            if (input.Length != 2)
-                return false;
+            if (input.Length != 2) 
+                return -1;
             
             char file = char.ToLower(input[0]);
             char rank = input[1];
             
-            if (file < 'a' || file > 'h')
-                return false;
-            if (rank < '1' || rank > '8')
-                return false;
+            if (file < 'a' || file > 'h') 
+                return -1;
+            if (rank < '1' || rank > '8') 
+                return -1;
             
-            index = (rank - '1') * 8 + (file - 'a');
-            
-            return true;
+            return (rank - '1') * 8 + (file - 'a');
         }
 
         public static string ToAlgebraic(int index)

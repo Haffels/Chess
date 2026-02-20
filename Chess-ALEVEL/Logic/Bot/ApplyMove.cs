@@ -31,12 +31,14 @@ namespace Game.Logic.Bot
             if (move.moveType == Move.MoveType.EnPassant)
             {
                 int capturedPawnSquare = PieceHelpers.IsWhite(movingPiece) ? move.to - 8 : move.to + 8;
+                
                 board.gameBoard[capturedPawnSquare] = Pieces.NO_PIECE;
             }
 
             if (move.moveType == Move.MoveType.Promotion || move.moveType == Move.MoveType.PromotionCapture)
             {
                 int colour = PieceHelpers.IsWhite(movingPiece) ? Pieces.WHITE : Pieces.BLACK;
+                
                 board.gameBoard[move.to] = Pieces.QUEEN * colour;
                 board.gameBoard[move.from] = Pieces.NO_PIECE;
                 return;
@@ -48,6 +50,7 @@ namespace Game.Logic.Bot
             if (move.moveType == Move.MoveType.DoubleMove)
             {
                 int enPassantSquare = PieceHelpers.IsWhite(movingPiece) ? move.to - 8 : move.to + 8;
+                
                 board.gameBoard[enPassantSquare] = PieceHelpers.IsWhite(movingPiece) ? Pieces.EN_PASSANT_MARKER : Pieces.BLACK * Pieces.EN_PASSANT_MARKER;
             }
         }

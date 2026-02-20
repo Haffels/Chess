@@ -25,6 +25,7 @@ namespace Game.Logic
             whiteQueensideRookMoved = false;
             blackKingsideRookMoved = false;
             blackQueensideRookMoved = false;
+            
             Game.ResetGameHistory();
         }
 
@@ -104,7 +105,8 @@ namespace Game.Logic
 
             Console.Write("piece to move: ");
             string fromInput = Console.ReadLine();
-            if (!Sq.TryParse(fromInput, out int userPieceSelection))
+            int userPieceSelection = Sq.Parse(fromInput);
+            if (userPieceSelection == -1)
             {
                 Console.WriteLine("invalid"); Console.ReadKey(); return;
             }
@@ -130,7 +132,8 @@ namespace Game.Logic
 
             Console.Write("move to: ");
             string toInput = Console.ReadLine();
-            if (!Sq.TryParse(toInput, out int toIndex))
+            int toIndex = Sq.Parse(toInput);
+            if (toIndex == -1)
             {
                 Console.WriteLine("invalid"); Console.ReadKey(); return;
             }

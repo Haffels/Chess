@@ -17,7 +17,9 @@ namespace Game.Logic.Bot
                 return Eval.EvaluatePosition(board, sideToMove);
 
             var orderedMoves = OrderMoves.OrderMovesList(allMoves, board);
+            
             int maxScore = int.MinValue;
+            
             bool prune = false;
 
             for (int i = 0; i < orderedMoves.Count; i++)
@@ -26,6 +28,7 @@ namespace Game.Logic.Bot
                 {
                     Board tempBoard  = board.Clone();
                     ApplyMove.ApplyMoveToBoard(tempBoard, orderedMoves[i]);
+                    
                     char opponentSide = sideToMove == 'w' ? 'b' : 'w';
                     int score = -RunMinimax(tempBoard, depth - 1, -beta, -alpha, opponentSide);
 
@@ -33,6 +36,7 @@ namespace Game.Logic.Bot
                         maxScore = score;
                     if (score > alpha)    
                         alpha = score;
+                    
                     prune = (alpha >= beta) ? true : false;
                 }
             }

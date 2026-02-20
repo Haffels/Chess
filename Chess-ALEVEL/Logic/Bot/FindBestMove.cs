@@ -10,14 +10,15 @@ namespace Game.Logic.Bot
 
             int searchDepth = GetAdaptiveDepth.GetDepth(board, allMoves.Count);
 
-            Console.WriteLine($"Depth: {searchDepth} | Moves: {allMoves.Count}");
+            // Console.WriteLine($"{searchDepth} {allMoves.Count} depth & moves");
             
             var orderedMoves = OrderMoves.OrderMovesList(allMoves, board);
 
             Move.MoveInfo bestMove = null;
-            int bestScore = int.MinValue,
-                alpha = int.MinValue, 
-                beta = int.MaxValue;
+            
+            int bestScore = int.MinValue;
+            int alpha = int.MinValue;
+            int beta = int.MaxValue;
 
             for (int i = 0; i < orderedMoves.Count; i++)
             {

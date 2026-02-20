@@ -26,6 +26,7 @@ namespace Game.Logic.Bot
                     int attackingPiece = Math.Abs(board.gameBoard[m.from]);
                     int victimValue = Kenith.pieceValues.ContainsKey(capturedPiece) ? Kenith.pieceValues[capturedPiece]  : 0;
                     int attackerValue = Kenith.pieceValues.ContainsKey(attackingPiece) ? Kenith.pieceValues[attackingPiece] : 0;
+                    
                     score += victimValue * 10 - attackerValue;
                 }
                 scores[i] = score;
