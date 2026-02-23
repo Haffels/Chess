@@ -39,7 +39,7 @@ namespace Game.Logic
 
         private static void OnTimerExpired(char side)
         {
-            Console.WriteLine($"{(side == 'w' ? "White" : "Black")}'s time has expired");
+            Console.WriteLine($"{(side == 'w' ? "White's" : "Black's")} time has expired");
             Console.WriteLine($"{(side == 'w' ? "Black" : "White")} wins on time");
             Environment.Exit(0);
         }
@@ -48,7 +48,7 @@ namespace Game.Logic
         {
             if (useTimer && gameTimer != null) { gameTimer.DisplayTimers(); Console.WriteLine(); }
 
-            Console.WriteLine($"It is {(sideToMove == 'w' ? "White" : "Black")}'s turn.");
+            Console.WriteLine($"It is {(sideToMove == 'w' ? "White's" : "Black's")} turn.");
 
             string result = Game.CheckGameState(sideToMove, board);
             if (result != "null")
@@ -83,7 +83,7 @@ namespace Game.Logic
                     if (useTimer && gameTimer != null) gameTimer.Stop();
                     sideToMove = sideToMove == 'w' ? 'b' : 'w';
                     
-                    //slows turns down
+                    //slows bot turns down
                     // if (userGameMode == "3")
                     //     Thread.Sleep(500);
                 }
@@ -92,7 +92,7 @@ namespace Game.Logic
 
             Console.Write("piece to move: ");
             string fromInput = Console.ReadLine();
-            int userPieceSelection = Sq.Parse(fromInput);
+            int userPieceSelection = Sq.TryParse(fromInput);
             
             if (userPieceSelection == -1)
             {
@@ -130,7 +130,7 @@ namespace Game.Logic
 
             Console.Write("move to: ");
             string toInput = Console.ReadLine();
-            int toIndex = Sq.Parse(toInput);
+            int toIndex = Sq.TryParse(toInput);
             if (toIndex == -1)
             {
                 Console.WriteLine("invalid"); Console.ReadKey(); 

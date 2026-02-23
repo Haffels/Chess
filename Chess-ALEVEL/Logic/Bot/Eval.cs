@@ -82,10 +82,8 @@ namespace Game.Logic.Bot
         {
             int kingPiece = side == 'w' ? Pieces.KING : -Pieces.KING;
             int kingPos = Array.IndexOf(board.gameBoard, kingPiece);
-            if (kingPos == -1)
-                return -10000;
-
             int safety = 0;
+            
             int[] adjacentSquares = {-9, -8, -7, -1, 1, 7, 8, 9};
             
             for (int i = 0; i < adjacentSquares.Length; i++)

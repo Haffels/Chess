@@ -2,7 +2,7 @@ namespace Game.Logic
 {
     public static class Sq
     {
-        public static int Parse(string input)
+        public static int TryParse(string input)
         {
             if (input.Length != 2) 
                 return -1;

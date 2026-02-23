@@ -13,8 +13,11 @@ namespace Game.Logic
 
         public static void RecordMove(Board board, Move.MoveInfo move, bool isPawnMove, bool isCapture)
         {
-            if (isPawnMove || isCapture) halfMoveClock = 0;
-            else halfMoveClock++;
+            if (isPawnMove || isCapture) 
+                halfMoveClock = 0;
+            else 
+                halfMoveClock++;
+            
             positionHistory.Add(BoardToString(board));
         }
 
@@ -54,12 +57,12 @@ namespace Game.Logic
             for (int i = 0; i < board.gameBoard.Length; i++)
             {
                 int piece = board.gameBoard[i];
-                if (piece == Pieces.NO_PIECE) continue;
-
+                
+                bool playablePiece = piece != Pieces.NO_PIECE && Math.Abs(piece) != Pieces.EN_PASSANT_MARKER;
                 bool isWhitePiece = piece > 0;
                 bool isOwnPiece = (sideToMove == 'w' && isWhitePiece) || (sideToMove == 'b' && !isWhitePiece);
 
-                if (isOwnPiece)
+                if (playablePiece && isOwnPiece)
                 {
                     var pieceMoves = GetLegalMovesForPiece(sideToMove, board, i);
                     for (int j = 0; j < pieceMoves.Count; j++)
@@ -74,7 +77,6 @@ namespace Game.Logic
         {
             int kingPiece = sideToMove == 'w' ? Pieces.WHITE * Pieces.KING : Pieces.BLACK * Pieces.KING;
             int kingPosition = Array.IndexOf(board.gameBoard, kingPiece);
-            if (kingPosition == -1) return true;
 
             char opponentSide = sideToMove == 'w' ? 'b' : 'w';
 
@@ -126,8 +128,6 @@ namespace Game.Logic
                 var move = moves[i];
                 if (move.moveType == Move.MoveType.Castle)
                 {
-                    if (IsKingInCheck(sideToMove, board)) continue;
-
                     int passThroughSquare = move.to > move.from ? move.from + 1 : move.from - 1;
 
                     Board tempBoard1 = board.Clone();
@@ -138,7 +138,7 @@ namespace Game.Logic
                     tempBoard2.gameBoard[move.to] = tempBoard2.gameBoard[move.from];
                     tempBoard2.gameBoard[move.from] = Pieces.NO_PIECE;
 
-                    if (!IsKingInCheck(sideToMove, tempBoard1) && !IsKingInCheck(sideToMove, tempBoard2))
+                    if (!IsKingInCheck(sideToMove, board) && !IsKingInCheck(sideToMove, tempBoard1) && !IsKingInCheck(sideToMove, tempBoard2))
                         legalMoves.Add(move);
                 }
                 else

@@ -10,7 +10,7 @@ namespace Game.Logic.Bot
 
             int searchDepth = GetAdaptiveDepth.GetDepth(board, allMoves.Count);
 
-            // Console.WriteLine($"{searchDepth} {allMoves.Count} depth & moves");
+            // Console.WriteLine($" depth {searchDepth} moves {allMoves.Count}");
             
             var orderedMoves = OrderMoves.OrderMovesList(allMoves, board);
 

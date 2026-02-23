@@ -83,10 +83,17 @@ namespace Game.Logic
         public string GetFormattedTime(char side)
         {
             int totalSeconds = GetRemainingTime(side);
-            return $"{totalSeconds / 60:D2}:{totalSeconds % 60:D2}";
+
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+
+            string minText = minutes < 10 ? "0" + minutes : minutes.ToString();
+            string secText = seconds < 10 ? "0" + seconds : seconds.ToString();
+
+            return minText + ":" + secText;
         }
 
-        public void DisplayTimers()
+        public void DisplayTimers() 
         {
             Console.WriteLine($"White: {GetFormattedTime('w')} | Black: {GetFormattedTime('b')}");
         }

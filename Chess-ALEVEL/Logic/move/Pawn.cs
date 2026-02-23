@@ -17,7 +17,7 @@ namespace Game.Logic
             int direction = isPawnWhite ? MOVE_UP : MOVE_DOWN;
             int startRank = isPawnWhite ? 1 : 6;
             int promotionRank = isPawnWhite ? 7 : 0;
-            int enPassantRank = isPawnWhite ? 5 : 4;
+            int enPassantRank = isPawnWhite ? 4 : 3;
             int currentFile = currentPos % 8;
             int currentRank = currentPos / 8;
             int diagonalLeft = isPawnWhite ? MOVE_UP_LEFT  : MOVE_DOWN_LEFT;

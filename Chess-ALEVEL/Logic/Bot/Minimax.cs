@@ -29,6 +29,10 @@ namespace Game.Logic.Bot
                     Board tempBoard  = board.Clone();
                     ApplyMove.ApplyMoveToBoard(tempBoard, orderedMoves[i]);
                     
+                    //print every move
+                    // Console.Clear();
+                    // tempBoard.PrintBoard(sideToMove);
+                    
                     char opponentSide = sideToMove == 'w' ? 'b' : 'w';
                     int score = -RunMinimax(tempBoard, depth - 1, -beta, -alpha, opponentSide);
 

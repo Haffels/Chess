@@ -8,6 +8,7 @@ namespace Game.Logic
         public static void Main()
         {
             string startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+            // string startFen = "7K/5k2/6q1/8/8/8/8/8 w - - 0 1";
             Board newBoard = new Board();
             FenLoader.ReadFenAndLoad(startFen, newBoard);
 
@@ -32,7 +33,7 @@ namespace Game.Logic
                 if (int.TryParse(timeInput, out int minutes) && minutes > 0)
                     timePerSide = minutes * 60;
                 else
-                    Console.WriteLine("invalid setting default");
+                    Console.WriteLine("invalid");
             }
 
             MakingMoves.CreateTimer(useTimer, timePerSide);

@@ -59,8 +59,11 @@ namespace Game.Logic
                 if (pos >= 0 && pos < 64)
                 {
                     int currentRow = currentPos / 8;
+                    int currentCol = currentPos % 8;
                     int newRow = pos / 8;
-                    bool wraps = Math.Abs(newRow - currentRow) > 1 && (dir == MOVE_RIGHT || dir == MOVE_LEFT);
+                    int newCol = pos % 8;
+
+                    bool wraps = Math.Abs(newRow - currentRow) > 1 || Math.Abs(newCol - currentCol) > 1;
 
                     if (!wraps)
                     {
