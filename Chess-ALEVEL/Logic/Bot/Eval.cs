@@ -92,8 +92,11 @@ namespace Game.Logic.Bot
                 if (pos >= 0 && pos < 64)
                 {
                     int piece = board.gameBoard[pos];
-                    if (side == 'w' && piece > 0 && piece != Pieces.EN_PASSANT_MARKER)  safety += 5;
-                    else if (side == 'b' && piece < 0 && piece != -Pieces.EN_PASSANT_MARKER) safety += 5;
+                    
+                    if (side == 'w' && piece > 0 && piece != Pieces.EN_PASSANT_MARKER)  
+                        safety += 5;
+                    else if (side == 'b' && piece < 0 && piece != -Pieces.EN_PASSANT_MARKER) 
+                        safety += 5;
                 }
             }
             return safety;
@@ -106,6 +109,7 @@ namespace Game.Logic.Bot
             {
                 int whitePawns = 0;
                 int blackPawns = 0;
+                
                 for (int rank = 0; rank < 8; rank++)
                 {
                     int pos = rank * 8 + file;
@@ -114,6 +118,7 @@ namespace Game.Logic.Bot
                     if (board.gameBoard[pos] == -Pieces.PAWN)
                         blackPawns++;
                 }
+                
                 if (whitePawns > 1)
                     score -= (whitePawns - 1) * 15;
                 if (blackPawns > 1)
@@ -125,6 +130,7 @@ namespace Game.Logic.Bot
         public static int GetPositionBonus(int pieceType, int position, bool isWhite)
         {
             int index = isWhite ? position : (63 - position);
+            
             switch (pieceType)
             {
                 case Pieces.PAWN:
@@ -137,7 +143,7 @@ namespace Game.Logic.Bot
                     return Kenith.rookTable[index];
                 case Pieces.KING:
                     return Kenith.kingMiddleGameTable[index];
-                default: 
+                default:
                     return 0;
             }
         }

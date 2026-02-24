@@ -9,8 +9,6 @@ namespace Game.Logic.Bot
                 return null;
 
             int searchDepth = GetAdaptiveDepth.GetDepth(board, allMoves.Count);
-
-            // Console.WriteLine($" depth {searchDepth} moves {allMoves.Count}");
             
             var orderedMoves = OrderMoves.OrderMovesList(allMoves, board);
 
@@ -35,6 +33,9 @@ namespace Game.Logic.Bot
                 }
                 if (score > alpha) 
                     alpha = score;
+                
+                // debug
+                Console.WriteLine($" depth {searchDepth} moves {allMoves.Count} score {score}");
             }
 
             return bestMove;

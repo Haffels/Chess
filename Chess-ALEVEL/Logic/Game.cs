@@ -170,14 +170,13 @@ namespace Game.Logic
                         return true;
                 }
             }
-            
             return false;
         }
 
         public static bool CheckInsufficientMaterial(Board board)
         {
-            int wKnights = 0, bKnights = 0, wBishops = 0, bBishops = 0;
-            int wPawns = 0, bPawns = 0, wRooks = 0, bRooks = 0, wQueens = 0, bQueens = 0;
+            int whiteKnights = 0, blackKnights = 0, whiteBishops = 0, blackBishops = 0;
+            int whitePawns = 0, blackPawns = 0, whiteRooks = 0, blackRooks = 0, whiteQueens = 0, blackQueens = 0;
 
             for (int i = 0; i < 64; i++)
             {
@@ -188,15 +187,20 @@ namespace Game.Logic
                 {
                     switch (type)
                     {
-                        case Pieces.PAWN:   wPawns++;   
+                        case Pieces.PAWN:   
+                            whitePawns++;   
                             break;
-                        case Pieces.KNIGHT: wKnights++; 
+                        case Pieces.KNIGHT: 
+                            whiteKnights++; 
                             break;
-                        case Pieces.BISHOP: wBishops++; 
+                        case Pieces.BISHOP: 
+                            whiteBishops++; 
                             break;
-                        case Pieces.ROOK:   wRooks++;   
+                        case Pieces.ROOK:   
+                            whiteRooks++;   
                             break;
-                        case Pieces.QUEEN:  wQueens++;  
+                        case Pieces.QUEEN:  
+                            whiteQueens++;  
                             break;
                     }
                 }
@@ -204,27 +208,32 @@ namespace Game.Logic
                 {
                     switch (type)
                     {
-                        case Pieces.PAWN:   bPawns++;   
+                        case Pieces.PAWN:   
+                            blackPawns++;   
                             break;
-                        case Pieces.KNIGHT: bKnights++; 
+                        case Pieces.KNIGHT: 
+                            blackKnights++; 
                             break;
-                        case Pieces.BISHOP: bBishops++; 
+                        case Pieces.BISHOP: 
+                            blackBishops++; 
                             break;
-                        case Pieces.ROOK:   bRooks++;   
+                        case Pieces.ROOK:   
+                            blackRooks++;   
                             break;
-                        case Pieces.QUEEN:  bQueens++;  
+                        case Pieces.QUEEN:  
+                            blackQueens++;  
                             break;
                     }
                 }
             }
 
-            if (wPawns > 0 || bPawns > 0 || wRooks > 0 || bRooks > 0 || wQueens > 0 || bQueens > 0)
+            if (whitePawns > 0 || blackPawns > 0 || whiteRooks > 0 || blackRooks > 0 || whiteQueens > 0 || blackQueens > 0)
                 return false;
-            if (wKnights == 0 && wBishops == 0 && bKnights == 0 && bBishops == 0) 
+            if (whiteKnights == 0 && whiteBishops == 0 && blackKnights == 0 && blackBishops == 0) 
                 return true;
-            if ((wKnights == 1 && wBishops == 0 && bKnights == 0 && bBishops == 0) || (bKnights == 1 && bBishops == 0 && wKnights == 0 && wBishops == 0)) 
+            if ((whiteKnights == 1 && whiteBishops == 0 && blackKnights == 0 && blackBishops == 0) || (blackKnights == 1 && blackBishops == 0 && whiteKnights == 0 && whiteBishops == 0)) 
                 return true;
-            if ((wBishops == 1 && wKnights == 0 && bKnights == 0 && bBishops == 0) || (bBishops == 1 && bKnights == 0 && wKnights == 0 && wBishops == 0)) 
+            if ((whiteBishops == 1 && whiteKnights == 0 && blackKnights == 0 && blackBishops == 0) || (blackBishops == 1 && blackKnights == 0 && whiteKnights == 0 && whiteBishops == 0)) 
                 return true;
             return false;
         }

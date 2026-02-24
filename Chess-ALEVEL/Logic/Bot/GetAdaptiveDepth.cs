@@ -5,16 +5,18 @@ namespace Game.Logic.Bot
         public static int GetDepth(Board board, int moveCount)
         {
             int material = CalculateMaterial.GetTotalMaterial(board);
-            
-            if (moveCount <= 10) 
+
+            if (moveCount <= 5)
+                return 8;
+            else if (moveCount <= 10)
                 return 7;
-            else if (moveCount <= 20 && material <= 2500) 
+            else if (moveCount <= 20 && material <= 2500)
                 return 6;
-            else if (moveCount <= 25) 
+            else if (moveCount <= 25)
                 return 5;
-            else 
+            else
                 return 4;
-            
+
         }
     }
 }
