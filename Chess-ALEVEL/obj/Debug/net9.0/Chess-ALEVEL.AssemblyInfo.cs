@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Chess-ALEVEL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b60e8fdfc712d0e762e3e577fb969480d2a2c9bb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52919670470cf605ce9abc7773e93ec94730b4fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Chess-ALEVEL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Chess-ALEVEL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

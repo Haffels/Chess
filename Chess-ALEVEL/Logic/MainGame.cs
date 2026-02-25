@@ -8,7 +8,7 @@ namespace Game.Logic
         public static void Main()
         {
             string startFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-            // string startFen = "7K/5k2/6q1/8/8/8/8/8 w - - 0 1";
+            // string startFen = "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1";
             Board newBoard = new Board();
             FenLoader.ReadFenAndLoad(startFen, newBoard);
 

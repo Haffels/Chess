@@ -20,7 +20,7 @@ namespace Game.Logic.Bot
                 if (m.to == 27 || m.to == 28 || m.to == 35 || m.to == 36)
                     score += 20;
 
-                if (m.moveType == Move.MoveType.Capture || m.moveType == Move.MoveType.PromotionCapture)
+                if (m.moveType == Move.MoveType.Capture || m.moveType == Move.MoveType.PromotionCapture)  
                 {
                     int capturedPiece = Math.Abs(board.gameBoard[m.to]);
                     int attackingPiece = Math.Abs(board.gameBoard[m.from]);
@@ -32,6 +32,7 @@ namespace Game.Logic.Bot
                 scores[i] = score;
             }
             
+            //BUUBLE sort
             for (int i = 0; i < moves.Count - 1; i++)
             {
                 for (int j = 0; j < moves.Count - 1 - i; j++)
