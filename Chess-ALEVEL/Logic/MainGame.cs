@@ -30,7 +30,8 @@ namespace Game.Logic
             {
                 Console.WriteLine("Enter time per side in minutes (default 10): ");
                 string timeInput = Console.ReadLine();
-                if (int.TryParse(timeInput, out int minutes) && minutes > 0)
+                int minutes = Convert.ToInt32(timeInput);
+                if (minutes > 0)
                     timePerSide = minutes * 60;
                 else
                     Console.WriteLine("invalid");
