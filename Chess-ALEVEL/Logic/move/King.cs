@@ -17,6 +17,9 @@ namespace Game.Logic
 
             int whiteKingStart = 4;
             int blackKingStart = 60;
+            
+            int currentRow = currentPos / 8;
+            int currentCol = currentPos % 8;
 
             if (currentPos == (isKingWhite ? whiteKingStart : blackKingStart))
             {
@@ -53,19 +56,17 @@ namespace Game.Logic
 
             for (int i = 0; i < directions.Length; i++)
             {
-                int dir = directions[i];
-                int pos = currentPos + dir;
+                int pos = currentPos + directions[i];
 
                 if (pos >= 0 && pos < 64)
                 {
-                    int currentRow = currentPos / 8;
-                    int currentCol = currentPos % 8;
                     int newRow = pos / 8;
                     int newCol = pos % 8;
 
-                    bool wraps = Math.Abs(newRow - currentRow) > 1 || Math.Abs(newCol - currentCol) > 1;
-
-                    if (!wraps)
+                    int differenceInRow = Math.Abs(newRow - currentRow);
+                    int differenceInCol = Math.Abs(newCol - currentCol);
+                    
+                    if (differenceInRow <= 1 && differenceInCol <= 1 && (differenceInRow + differenceInCol) != 0)
                     {
                         int piece = board[pos];
                         bool isOpponent = isKingWhite ? piece < Pieces.NO_PIECE : piece > Pieces.NO_PIECE;

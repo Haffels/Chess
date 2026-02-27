@@ -26,10 +26,10 @@ namespace Game.Logic
                 {
                     int newRow = pos / 8;
                     int newCol = pos % 8;
-                    int dRow = Math.Abs(newRow - currentRow);
-                    int dCol = Math.Abs(newCol - currentCol);
+                    int differenceInRow = Math.Abs(newRow - currentRow);
+                    int differenceInCol = Math.Abs(newCol - currentCol);
 
-                    if ((dRow == 2 && dCol == 1) || (dRow == 1 && dCol == 2))
+                    if ((differenceInRow == 2 && differenceInCol == 1) || (differenceInRow == 1 && differenceInCol == 2))
                     {
                         int piece = board[pos];
                         bool isOpponent = isKnightWhite ? piece < Pieces.NO_PIECE : piece > Pieces.NO_PIECE;
