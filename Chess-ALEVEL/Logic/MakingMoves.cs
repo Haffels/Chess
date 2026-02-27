@@ -46,7 +46,11 @@ namespace Game.Logic
 
         public static void HandleMoves(Board board)
         {
-            if (useTimer && gameTimer != null) { gameTimer.DisplayTimers(); Console.WriteLine(); }
+            if (useTimer && gameTimer != null)
+            {
+                gameTimer.DisplayTimers(); 
+                Console.WriteLine();
+            }
 
             Console.WriteLine($"It is {(sideToMove == 'w' ? "White's" : "Black's")} turn.");
 
@@ -59,9 +63,11 @@ namespace Game.Logic
                 return;
             }
 
-            if (useTimer && gameTimer != null) gameTimer.Start(sideToMove);
+            if (useTimer && gameTimer != null) 
+                gameTimer.Start(sideToMove);
 
             bool isBotTurn = false;
+            
             if (MainGame.userGameMode == "1")
                 isBotTurn = (userSide == 'w' && sideToMove == 'b') || (userSide == 'b' && sideToMove == 'w');
             else if (userGameMode == "3")
