@@ -19,7 +19,7 @@ namespace Game.Logic
                 char newRank = fenBoard[i];
                 if (newRank == '/')
                 {
-                    file = Pieces.NO_PIECE;
+                    file = 0;
                     rank--;
                 }
                 else if (char.IsDigit(newRank))

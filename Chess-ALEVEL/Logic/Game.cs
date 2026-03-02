@@ -5,12 +5,6 @@ namespace Game.Logic
         private static List<string> positionHistory = new List<string>();
         private static int halfMoveClock;
 
-        public static void ResetGameHistory()
-        {
-            positionHistory.Clear();
-            halfMoveClock = 0;
-        }
-
         public static void RecordMove(Board board, Move.MoveInfo move, bool isPawnMove, bool isCapture)
         {
             if (isPawnMove || isCapture) 

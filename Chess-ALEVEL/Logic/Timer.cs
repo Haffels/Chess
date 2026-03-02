@@ -1,3 +1,5 @@
+// a lot of google was used for figuring out how threads and timer would work
+
 namespace Game.Logic
 {
     public class Timer
@@ -20,7 +22,8 @@ namespace Game.Logic
 
         public void Start(char side)
         {
-            if (isRunning) Stop();
+            if (isRunning) 
+                Stop();
             currentSide = side;
             isRunning = true;
             lastUpdate = DateTime.Now;

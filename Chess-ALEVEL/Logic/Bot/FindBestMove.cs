@@ -35,7 +35,7 @@ namespace Game.Logic.Bot
                     alpha = score;
                 
                 // debug
-                Console.WriteLine($" depth {searchDepth} moves {allMoves.Count} score {score}");
+                // Console.WriteLine($" depth {searchDepth} moves {allMoves.Count} score {score}");
             }
 
             return bestMove;

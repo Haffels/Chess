@@ -1,6 +1,6 @@
 namespace Game.Logic
 {
-    public static class Sq
+    public static class Square
     {
         public static int TryParse(string input)
         {

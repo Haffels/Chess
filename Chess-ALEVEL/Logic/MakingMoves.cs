@@ -98,7 +98,7 @@ namespace Game.Logic
 
             Console.Write("piece to move: ");
             string fromInput = Console.ReadLine();
-            int userPieceSelection = Sq.TryParse(fromInput);
+            int userPieceSelection = Square.TryParse(fromInput);
             
             if (userPieceSelection == -1)
             {
@@ -132,11 +132,11 @@ namespace Game.Logic
             Console.WriteLine("legal moves:");
             
             for (int i = 0; i < moves.Count; i++)
-                Console.WriteLine($"{Sq.ToAlgebraic(moves[i].from)} -> {Sq.ToAlgebraic(moves[i].to)} ({moves[i].moveType})");
+                Console.WriteLine($"{Square.ToAlgebraic(moves[i].from)} -> {Square.ToAlgebraic(moves[i].to)} ({moves[i].moveType})");
 
             Console.Write("move to: ");
             string toInput = Console.ReadLine();
-            int toIndex = Sq.TryParse(toInput);
+            int toIndex = Square.TryParse(toInput);
             if (toIndex == -1)
             {
                 Console.WriteLine("invalid"); Console.ReadKey(); 
